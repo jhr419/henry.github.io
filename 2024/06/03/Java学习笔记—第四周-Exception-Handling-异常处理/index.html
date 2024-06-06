@@ -26,7 +26,7 @@
 <meta property="og:description" content="Run-Time Error Handling 错误类型：   系统自动抛出的异常 所有系统定义的编译和运行异常都可以由系统自动抛出，称为标准异常   语句抛出的异常 用户程序自定义的异常和应用程序特定的异常，必须借助throws 和 throw 语句来定义抛出异常。   具体来说，有很多种不同的异常可能出现： 用户输入了非法数据，要打开的文件不存在或者没有权限，网络通信时连接中断，或者JVM内存">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2024-06-03T11:44:31.000Z">
-<meta property="article:modified_time" content="2024-06-03T12:10:01.606Z">
+<meta property="article:modified_time" content="2024-06-06T09:09:54.518Z">
 <meta property="article:author" content="Henry Jin">
 <meta property="article:tag" content="Java">
 <meta property="article:tag" content="笔记">
@@ -326,7 +326,7 @@
               <p id="updated-time" class="note note-info" style="display: none">
                 
                   
-                    本文最后更新于 2024-06-03T20:10:01+08:00
+                    本文最后更新于 2024-06-06T17:09:54+08:00
                   
                   
 
@@ -458,50 +458,58 @@
 <h2 id="Understanding-Stack-Trace-Messages">Understanding Stack Trace Messages</h2>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">try</span> &#123;<br>	statement1;<br>	statement2;<br>	statement3;<br>&#125;<br><span class="hljs-keyword">catch</span> (Exception1 ex1) &#123; &#125;<br><span class="hljs-keyword">catch</span> (Exception2 ex2) &#123; &#125;<br>statement4;<br></code></pre></td></tr></table></figure>
 <p>这段代码中，假设s2会造成异常，请问：</p>
+<ol>
+<li>
 <p>s3会执行吗？</p>
+</li>
+<li>
 <p>如果异常没有被捕获，s4会执行吗？</p>
+</li>
+<li>
 <p>异常被其中一个catch捕获，s4会执行吗？</p>
+</li>
+</ol>
 <p>答案：</p>
 <ul>
-<li>**<code>statement3</code>**不会执行，s3抛出异常后，会直接跳转到catch块中</li>
-<li>如果**<code>try</code><strong>块中的异常没有被</strong><code>catch</code><strong>块捕获，</strong><code>statement4</code>**不会执行。</li>
-<li>如果**<code>try</code><strong>块中的异常被某个</strong><code>catch</code><strong>块捕获并处理，</strong><code>statement4</code>**会执行。</li>
+<li><code>statement3</code>不会执行，s2抛出异常后，会直接跳转到catch块中</li>
+<li>如果<code>try</code>块中的异常没有被<code>catch</code>块捕获，<code>statement4</code>不会执行。</li>
+<li>如果<code>try</code>块中的异常被某个<code>catch</code>块捕获并处理，<code>statement4</code>会执行。</li>
 </ul>
 <p>为什么没有被catch捕获s4就不会执行？</p>
-<p>在Java中，如果一个异常没有被捕获并处理，程序的正常控制流会被中断，异常会沿着调用栈向上传播，直到被某个合适的异常处理程序捕获或者导致程序终止。这就是为什么没有被捕获的异常会导致**<code>statement4</code>**不执行的原因。具体原因如下：</p>
+<p>在Java中，如果一个异常没有被捕获并处理，程序的正常控制流会被中断，异常会沿着调用栈向上传播，直到被某个合适的异常处理程序捕获或者导致程序终止。这就是为什么没有被捕获的异常会导致<code>statement4</code>不执行的原因。具体原因如下：</p>
 <h3 id="异常传播机制"><strong>异常传播机制</strong></h3>
 <ol>
-<li><strong>异常抛出</strong>：当在**<code>try</code><strong>块中抛出一个异常时，程序会立即停止执行</strong><code>try</code>**块中的剩余代码。</li>
-<li><strong>寻找处理程序</strong>：程序会检查是否有与抛出异常类型匹配的**<code>catch</code><strong>块。如果找到一个匹配的</strong><code>catch</code><strong>块，控制流会转移到这个</strong><code>catch</code>**块，并执行其中的代码。</li>
-<li><strong>未匹配处理程序</strong>：如果没有找到匹配的**<code>catch</code>**块，异常会沿着调用栈向上传播。传播过程会一直持续到找到合适的异常处理程序或最终到达Java虚拟机（JVM）。</li>
-<li><strong>程序终止</strong>：如果异常传播到JVM而没有被捕获，JVM会终止程序，并打印异常的堆栈跟踪信息。</li>
+<li><strong>异常抛出</strong>：当在<code>try</code><strong>块中抛出一个异常时，程序会立即停止执行</strong><code>try</code><strong>块中的剩余代码。</strong></li>
+<li><strong>寻找处理程序</strong>：<strong>程序会检查是否有与抛出异常类型匹配的</strong><code>catch</code><strong>块。如果找到一个匹配的</strong><code>catch</code><strong>块，控制流会转移到这个</strong><code>catch</code><strong>块，并执行其中的代码。</strong></li>
+<li><strong>未匹配处理程序</strong>：<strong>如果没有找到匹配的</strong><code>catch</code><strong>块，异常会沿着调用栈向上传播。传播过程会一直持续到找到合适的异常处理程序或最终到达Java虚拟机（JVM）。</strong></li>
+<li><strong>程序终止</strong>：<strong>如果异常传播到JVM而没有被捕获，JVM会终止程序，并打印异常的堆栈跟踪信息。</strong></li>
 </ol>
 <h3 id="示例代码分析"><strong>示例代码分析</strong></h3>
 <p>让我们用示例代码详细说明这一过程：</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><code class="hljs java">java复制代码<br><span class="hljs-keyword">try</span> &#123;<br>    statement1;<br>    statement2;<br>    statement3;<br>&#125; <span class="hljs-keyword">catch</span> (Exception1 ex1) &#123;<br>    <span class="hljs-comment">// 处理Exception1</span><br>&#125; <span class="hljs-keyword">catch</span> (Exception2 ex2) &#123;<br>    <span class="hljs-comment">// 处理Exception2</span><br>&#125;<br>statement4;<br><br></code></pre></td></tr></table></figure>
-<p>假设在**<code>try</code>**块中抛出了一个未被捕获的异常：</p>
+<p>假设在<code>try</code>块中抛出了一个未被捕获的异常：</p>
 <ol>
-<li><strong>异常抛出前</strong>：**<code>statement1</code><strong>和</strong><code>statement2</code>**顺利执行。</li>
-<li><strong>异常抛出</strong>：<strong><code>statement3</code><strong>抛出了</strong><code>Exception3</code></strong>，而**<code>Exception3</code><strong>没有匹配的</strong><code>catch</code>**块。</li>
-<li><strong>控制流中断</strong>：由于没有匹配的**<code>catch</code><strong>块，异常沿着调用栈向上传播。</strong><code>try</code><strong>块中的剩余代码（包括</strong><code>statement3</code>**之后的代码）不会执行。</li>
+<li><strong>异常抛出前</strong>：<code>statement1</code>和<code>statement2</code>顺利执行。</li>
+<li><strong>异常抛出</strong>：<code>statement3</code>抛出了<code>Exception3</code>，而<code>Exception3</code>没有匹配的<code>catch</code>块。</li>
+<li><strong>控制流中断</strong>：由于没有匹配的<code>catch</code>块，异常沿着调用栈向上传播。<code>try</code>块中的剩余代码（包括<code>statement3</code>之后的代码）不会执行。</li>
 <li><strong>异常传播到调用者</strong>：如果当前方法没有处理异常，异常会继续向上传播到调用该方法的地方。</li>
-<li><strong>JVM处理异常</strong>：如果异常最终传播到JVM，程序会终止，**<code>statement4</code>**永远不会执行。</li>
+<li><strong>JVM处理异常</strong>：如果异常最终传播到JVM，程序会终止，<code>statement4</code>永远不会执行。</li>
 </ol>
 <h3 id="捕获异常的情况"><strong>捕获异常的情况</strong></h3>
 <p>当异常被捕获时，程序的控制流如下：</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><code class="hljs java">java复制代码<br><span class="hljs-keyword">try</span> &#123;<br>    statement1;<br>    statement2;<br>    statement3;<br>&#125; <span class="hljs-keyword">catch</span> (Exception1 ex1) &#123;<br>    <span class="hljs-comment">// 处理Exception1</span><br>&#125; <span class="hljs-keyword">catch</span> (Exception2 ex2) &#123;<br>    <span class="hljs-comment">// 处理Exception2</span><br>&#125;<br>statement4;<br><br></code></pre></td></tr></table></figure>
-<p>假设**<code>statement3</code><strong>抛出了一个被捕获的</strong><code>Exception1</code>**：</p>
+<p>假设**<code>statement3</code>抛出了一个被捕获的<code>Exception1</code>：</p>
 <ol>
-<li><strong>异常抛出前</strong>：**<code>statement1</code><strong>和</strong><code>statement2</code>**顺利执行。</li>
-<li><strong>异常抛出</strong>：<strong><code>statement3</code><strong>抛出</strong><code>Exception1</code></strong>。</li>
-<li><strong>控制流转移</strong>：程序找到匹配的**<code>catch (Exception1 ex1)</code>**块，控制流转移到该块并执行处理代码。</li>
-<li><strong>异常处理后</strong>：**<code>catch</code><strong>块执行完后，程序继续执行</strong><code>try-catch</code>**块后的代码。</li>
-<li><strong>继续执行</strong>：**<code>statement4</code>**会执行，因为异常已被处理。</li>
+<li><strong>异常抛出前</strong>：<code>statement1</code>和<code>statement2</code>顺利执行。</li>
+<li><strong>异常抛出</strong>：<code>statement3</code>抛出<code>Exception1</code>。</li>
+<li><strong>控制流转移</strong>：程序找到匹配的<code>catch (Exception1 ex1)</code>块，控制流转移到该块并执行处理代码。</li>
+<li><strong>异常处理后</strong>：<code>catch</code>块执行完后，程序继续执行<code>try-catch</code>块后的代码。</li>
+<li><strong>继续执行</strong>：<code>statement4</code>会执行，因为异常已被处理。</li>
 </ol>
 <h3 id="总结"><strong>总结</strong></h3>
 <ul>
-<li><strong>未捕获异常</strong>：导致控制流中断，程序终止，**<code>statement4</code>**不执行。</li>
-<li><strong>捕获异常</strong>：异常被处理后，程序继续执行，**<code>statement4</code>**会执行。</li>
+<li><strong>未捕获异常</strong>：导致控制流中断，程序终止，<code>statement4</code>不执行。</li>
+<li><strong>捕获异常</strong>：异常被处理后，程序继续执行，<code>statement4</code>会执行。</li>
 </ul>
 <p>这种行为确保异常处理的集中和清晰，同时避免程序在未处理异常情况下继续执行，可能导致不可预测的行为和错误。</p>
 <h1>Assertions断言</h1>
@@ -582,7 +590,7 @@
       
         <div class="license-meta-item license-meta-date">
           <div>更新于</div>
-          <div>2024年6月3日</div>
+          <div>2024年6月6日</div>
         </div>
       
       
