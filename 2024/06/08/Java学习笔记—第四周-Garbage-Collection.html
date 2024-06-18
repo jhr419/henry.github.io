@@ -1,0 +1,556 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/henry.github.io/img/Icon.png">
+  <link rel="icon" href="/henry.github.io/img/Icon.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+    <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="Henry Jin">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="http:&#x2F;&#x2F;t.csdnimg.cn&#x2F;BFuJ3 Heap 和 Stack 当运行Java程序时 JVM为程序提供内存，来自所使用的OS Java两种主要内存域 Heap：对象实例，数组在此 Stack：局部变量，方法在此，当被调用时，才会处于存活状态 局部变量&amp;实例变量 我们主要关注的变量类型： 局部变量（也叫栈变量）Local(also known as stack) variab">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Java学习笔记—第四周-Garbage-Collection">
+<meta property="og:url" content="https://jhr419.github.io/henry.github.io/drafts/Java%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E2%80%94%E7%AC%AC%E5%9B%9B%E5%91%A8-Garbage-Collection">
+<meta property="og:site_name" content="Henry&#39;s Blog">
+<meta property="og:description" content="http:&#x2F;&#x2F;t.csdnimg.cn&#x2F;BFuJ3 Heap 和 Stack 当运行Java程序时 JVM为程序提供内存，来自所使用的OS Java两种主要内存域 Heap：对象实例，数组在此 Stack：局部变量，方法在此，当被调用时，才会处于存活状态 局部变量&amp;实例变量 我们主要关注的变量类型： 局部变量（也叫栈变量）Local(also known as stack) variab">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://jhr419.github.io/henry.github.io/henry.github.io/drafts/Java%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E2%80%94%E7%AC%AC%E5%9B%9B%E5%91%A8-Garbage-Collectio/pic1.png">
+<meta property="og:image" content="https://jhr419.github.io/henry.github.io/henry.github.io/drafts/Java%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E2%80%94%E7%AC%AC%E5%9B%9B%E5%91%A8-Garbage-Collectio/pic2.png">
+<meta property="og:image" content="https://jhr419.github.io/henry.github.io/henry.github.io/drafts/Java%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E2%80%94%E7%AC%AC%E5%9B%9B%E5%91%A8-Garbage-Collectio/pic3.png">
+<meta property="og:image" content="https://jhr419.github.io/henry.github.io/henry.github.io/drafts/Java%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E2%80%94%E7%AC%AC%E5%9B%9B%E5%91%A8-Garbage-Collectio/pic4.png">
+<meta property="og:image" content="https://jhr419.github.io/henry.github.io/henry.github.io/drafts/Java%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E2%80%94%E7%AC%AC%E5%9B%9B%E5%91%A8-Garbage-Collectio/pic5.png">
+<meta property="article:published_time" content="2024-06-08T01:08:18.000Z">
+<meta property="article:modified_time" content="2024-06-08T01:58:36.971Z">
+<meta property="article:author" content="Henry Jin">
+<meta property="article:tag" content="Java">
+<meta property="article:tag" content="笔记">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://jhr419.github.io/henry.github.io/henry.github.io/drafts/Java%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E2%80%94%E7%AC%AC%E5%9B%9B%E5%91%A8-Garbage-Collectio/pic1.png">
+  
+  
+    <meta name="referrer" content="no-referrer-when-downgrade">
+  
+  
+  <title>Java学习笔记—第四周-Garbage-Collection - Henry&#39;s Blog</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/henry.github.io/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/henry.github.io/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/henry.github.io/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"jhr419.github.io","root":"/henry.github.io/","version":"1.9.7","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"left","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":true,"follow_dnt":false,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/henry.github.io/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/henry.github.io/js/utils.js" ></script>
+  <script  src="/henry.github.io/js/color-schema.js" ></script>
+  
+
+  
+
+  
+    <!-- Google tag (gtag.js) -->
+    <script async>
+      if (!Fluid.ctx.dnt) {
+        Fluid.utils.createScript("https://www.googletagmanager.com/gtag/js?id=", function() {
+          window.dataLayer = window.dataLayer || [];
+          function gtag() {
+            dataLayer.push(arguments);
+          }
+          gtag('js', new Date());
+          gtag('config', '');
+        });
+      }
+    </script>
+  
+
+  
+
+  
+
+  
+
+  
+
+
+
+  
+<meta name="generator" content="Hexo 7.2.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 60vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/henry.github.io/">
+      <strong>Henry&#39;s Blog</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/henry.github.io/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/henry.github.io/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/henry.github.io/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/henry.github.io/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/henry.github.io/about/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/henry.github.io/img/background.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="Java学习笔记—第四周-Garbage-Collection"></span>
+          
+        </div>
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      <div class="container nopadding-x-md">
+        <div id="board"
+          >
+          
+          <div class="container">
+            <div class="row">
+              <div class="col-12 col-md-10 m-auto">
+                
+
+<article class="page-content">
+  <h1></h1>
+<p><a target="_blank" rel="noopener" href="http://t.csdnimg.cn/BFuJ3">http://t.csdnimg.cn/BFuJ3</a></p>
+<h1>Heap 和 Stack</h1>
+<h2 id="当运行Java程序时">当运行Java程序时</h2>
+<p>JVM为程序提供内存，来自所使用的OS</p>
+<h2 id="Java两种主要内存域">Java两种主要内存域</h2>
+<p>Heap：对象实例，数组在此</p>
+<p>Stack：局部变量，方法在此，当被调用时，才会处于存活状态</p>
+<h1>局部变量&amp;实例变量</h1>
+<p>我们主要关注的变量类型：</p>
+<h2 id="局部变量（也叫栈变量）Local-also-known-as-stack-variables：">局部变量（也叫栈变量）Local(also known as stack) variables：</h2>
+<p>在方法中和方法参数中声明的变量</p>
+<p>它们是临时变量，只有当它们所属的方法处于栈上时，它们才是存活状态</p>
+<h2 id="实例变量-Instance-veriables：">实例变量 Instance veriables：</h2>
+<p>在类中，方法之外的变量</p>
+<p>在属于它们的对象中存活（）</p>
+<p>问：instance 变量和 class变量区别？</p>
+<p>答：类变量是静态变量，属于类本身的，extend了该类的子类和该类的对象实例都可以使用</p>
+<p>实例变量是属于对象的，每个对象中都有一个实例变量的副本</p>
+<h1>方法与栈</h1>
+<p>当方法被调用，它会在栈顶，保留直到使用完成</p>
+<h2 id="栈帧">栈帧</h2>
+<p>实际被推入栈中的内容</p>
+<p>包含方法的状态（哪一行代码正在执行和局部代码的值）</p>
+<img src="/henry.github.io/henry.github.io/drafts/Java%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E2%80%94%E7%AC%AC%E5%9B%9B%E5%91%A8-Garbage-Collectio/pic1.png" srcset="/henry.github.io/img/loading.gif" lazyload>
+栈帧是指函数在被调用时，所拥有的一块独立的用于存放函数所使用的状态和变量的栈空间。每个函数都对应有一个栈帧。同一个函数多次进入，每次可能会分配到不同的栈帧。整个栈的内容在同一个时刻可以看作是由许多栈帧依序“堆叠”组成的。
+<p><a target="_blank" rel="noopener" href="https://ctfbook.ph0en1x.com/reverse/zhan-3001-zhan-zheng-yu-han-shu-diao-yong">https://ctfbook.ph0en1x.com/reverse/zhan-3001-zhan-zheng-yu-han-shu-diao-yong</a></p>
+<h1>对象引用&amp;变量存储位置</h1>
+<h2 id="Object-reference-aka-non-primitive-variables-对象引用变量：">Object reference (aka non-primitive) variables 对象引用变量：</h2>
+<p>保存一个对象的引用，而不是实际的对象</p>
+<p>一个是对象的引用的局部变量存在于栈中，而对象本身仍然在堆中</p>
+<h2 id="变量存储位置：">变量存储位置：</h2>
+<p>Instance variables：在堆中</p>
+<p>Local variables：在栈中</p>
+<h1>Superclasses, Inheritance &amp; Constructors</h1>
+<h2 id="关系：">关系：</h2>
+<ol>
+<li>每个对象都包含它们自己声明的实例变量和从它们超类中的所有内容</li>
+<li>当对象被创建，对象将会有代表每个超类的“层”</li>
+<li>Java中所有类都是继承了Object，它是万类之母</li>
+</ol>
+<p><img src="/henry.github.io/henry.github.io/drafts/Java%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E2%80%94%E7%AC%AC%E5%9B%9B%E5%91%A8-Garbage-Collectio/pic2.png" srcset="/henry.github.io/img/loading.gif" lazyload>&gt;</p>
+<h2 id="构造器链式">构造器链式</h2>
+<ol>
+<li>当创建一个新的对象，在它的继承树中的所有构造器都会执行</li>
+<li>当执行new时，会触发构造函数的链式反应</li>
+<li>一个类只有当超类部分全部形成后才算完全形成</li>
+</ol>
+<h1>执行构造器</h1>
+<p>子类的所有构造器的第一行，都有一句隐身的super()</p>
+<ol>
+<li>
+<p>当父类存在无参构造器，或者不存在有参构造器（JVM会默认给出无参构造器）：</p>
+<p>子类会自动调用父类的无参构造器，即默认构造器</p>
+</li>
+<li>
+<p>当父类构造器有参，且没有给出无参构造器</p>
+<p>由于子类构造器会默认执行父类无参构造器，而父类不存在无参构造器，此时编译不能通过</p>
+</li>
+</ol>
+<p><a target="_blank" rel="noopener" href="http://t.csdnimg.cn/ywJEi">http://t.csdnimg.cn/ywJEi</a></p>
+<h2 id="编译器和生成构造器">编译器和生成构造器</h2>
+<ol>
+<li>若类中没有提供构造器，编译器会默认添加一个诸如下方的构造器：</li>
+</ol>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs python">public ClassName() &#123; <span class="hljs-built_in">super</span>(); &#125;<br></code></pre></td></tr></table></figure>
+<p>！！！子类中调用父类构造器，必须在第一行！！！</p>
+<ol>
+<li>在同一个类中的构造器之间可以相互调用（重载）</li>
+</ol>
+<h1>对象和变量的生命周期</h1>
+<ol>
+<li>
+<p>对象声明周期：</p>
+<p>取决于引用变量的生命周期</p>
+<p>Object is alive ( or dead ) if its reference is alive ( or dead )</p>
+</li>
+<li>
+<p>变量声明周期</p>
+<p>对基本变量和引用变量是一样的</p>
+<p>局部变量和实例变量不同</p>
+<img src="/henry.github.io/henry.github.io/drafts/Java%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E2%80%94%E7%AC%AC%E5%9B%9B%E5%91%A8-Garbage-Collectio/pic3.png" srcset="/henry.github.io/img/loading.gif" lazyload>
+<p>具体来说：</p>
+<p>局部变量，只在方法（也称为作用域scope）中存活，当方法结束，变量也会disappears</p>
+<p>实例变量，只要对象存在，实例变量就会存活</p>
+</li>
+</ol>
+<h1>局部变量的生命周期和作用域</h1>
+<ol>
+<li>只要它的栈帧还在栈上，（即，它所属的方法完成前）它就会存活。</li>
+<li>作用域：只在声明它的方法中。</li>
+<li>存活（且维持原样）但不在作用域，当它的方法调用其它方法。</li>
+<li>一个引用变量只有在作用域才能被使用</li>
+</ol>
+<img src="/henry.github.io/henry.github.io/drafts/Java%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E2%80%94%E7%AC%AC%E5%9B%9B%E5%91%A8-Garbage-Collectio/pic4.png" srcset="/henry.github.io/img/loading.gif" lazyload>
+<p><a target="_blank" rel="noopener" href="http://t.csdnimg.cn/HS6zA">http://t.csdnimg.cn/HS6zA</a></p>
+<h1>对象的生命周期&amp;GC</h1>
+<ol>
+<li>
+<p>Java中对象是被动态分配的并且按需生成</p>
+<ol>
+<li>对象的内存空间是在运行时分配的，而不是编译时</li>
+<li>new关键字为对象分配allocated内存</li>
+</ol>
+</li>
+<li>
+<p>由于是动态分配，所以内存会随着程序的运行而增加或者减少</p>
+<ol>
+<li>例如，在循环中创建对象，每次循环创建对象时，都会造成内存增加</li>
+</ol>
+</li>
+<li>
+<p>一旦对象的引用丢失，它就不能再恢复</p>
+<ol>
+<li>对象仍然会占用内存，但再也不能被程序使用</li>
+</ol>
+</li>
+<li>
+<p>Memory Leak:</p>
+<ol>
+<li>在C中，这是一个程序失败的经典原因</li>
+<li>在Java中，我们不必担心，因为Java会为我们处理garbage collection</li>
+</ol>
+</li>
+<li>
+<p>只要对象存在存活的引用，那么对象就是存活的</p>
+<ol>
+<li>如果对象只有一个引用，并且一个持有它的栈帧从栈中弹出，那么这个对象就会被遗弃在堆中。
+<ol>
+<li>这种情况下，对象符合GC条件，就会被执行GC，垃圾回收</li>
+</ol>
+</li>
+<li>符合GC的对象
+<ol>
+<li>程序员并不需要回收他们使用过的内存，但是必须确保对象在合适时候被抛弃</li>
+<li>如果程序处于低内存情况，GC将会尽可能丢弃符合的变量</li>
+</ol>
+</li>
+</ol>
+<img src="/henry.github.io/henry.github.io/drafts/Java%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E2%80%94%E7%AC%AC%E5%9B%9B%E5%91%A8-Garbage-Collectio/pic5.png" srcset="/henry.github.io/img/loading.gif" lazyload>  
+<h1>null引用变量</h1>
+<p>如果设置引用变量为null，那么在该null引用上使用dot操作符，就会得到运行时错误：</p>
+<p>NullPointerException</p>
+<p>因为这里引用为空，在对象变量处找不到一个具体的对象实例，故无法操作</p>
+</li>
+</ol>
+
+
+  
+
+</article>
+
+
+
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://github.com/jhr419" target="_blank" rel="nofollow noopener"><span>Henry</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+    <div class="statistics">
+  
+  
+
+  
+    
+      <span id="busuanzi_container_site_pv" style="display: none">
+        总访问量 
+        <span id="busuanzi_value_site_pv"></span>
+         次
+      </span>
+    
+    
+      <span id="busuanzi_container_site_uv" style="display: none">
+        总访客数 
+        <span id="busuanzi_value_site_uv"></span>
+         人
+      </span>
+    
+    
+  
+</div>
+
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/henry.github.io/js/events.js" ></script>
+<script  src="/henry.github.io/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/henry.github.io/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  <script  src="/henry.github.io/js/local-search.js" ></script>
+
+  <script defer src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/henry.github.io/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>
