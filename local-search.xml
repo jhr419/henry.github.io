@@ -29,37 +29,6 @@
   
   
   <entry>
-    <title>STM32开发—(一)配置CubeMX</title>
-    <link href="/henry.github.io/2024/07/12/STM32%E5%BC%80%E5%8F%91%E2%80%94-%E4%B8%80-%E9%85%8D%E7%BD%AECubeMX/"/>
-    <url>/henry.github.io/2024/07/12/STM32%E5%BC%80%E5%8F%91%E2%80%94-%E4%B8%80-%E9%85%8D%E7%BD%AECubeMX/</url>
-    
-    <content type="html"><![CDATA[<p>时钟树<br>锁相环</p><p>GPIO输出模式 推挽开漏</p><p>神奇的bug：项目名不能有特殊符号例如&amp;</p><p>cfg文件</p><p>debug配置</p><p>svd文件</p>]]></content>
-    
-    
-    <categories>
-      
-      <category>教学</category>
-      
-      <category>STM32开发</category>
-      
-    </categories>
-    
-    
-    <tags>
-      
-      <tag>嵌入式</tag>
-      
-      <tag>STM</tag>
-      
-      <tag>教学</tag>
-      
-    </tags>
-    
-  </entry>
-  
-  
-  
-  <entry>
     <title>Java学习笔记—第四周-Garbage-Collection</title>
     <link href="/henry.github.io/2024/06/08/Java%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E2%80%94%E7%AC%AC%E5%9B%9B%E5%91%A8-Garbage-Collection/"/>
     <url>/henry.github.io/2024/06/08/Java%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E2%80%94%E7%AC%AC%E5%9B%9B%E5%91%A8-Garbage-Collection/</url>
