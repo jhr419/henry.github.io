@@ -18,24 +18,25 @@
   <meta name="author" content="Henry Jin">
   <meta name="keywords" content="">
   
-    <meta name="description" content="摘要：笔者写的代码不多，能力有限，文章主要是将自己在实践过程中遇到的问题记录汇总，同时拓展学习一下知识，文章内容如有纰漏，或者各位大佬有更高的见解，欢迎联系笔者一起交流学习，联系方式在我的主页。  背景 我们先来看这样一段代码 123456789101112131415161718192021222324252627global cntcnt &#x3D; self.cntUnitENU &#x3D; np.arr">
+    <meta name="description" content="进程与线程 进程 一个进程就是内存中运行的一个应用程序，比如在Windows系统中，一个运行的.exe就是一个进程。每个进程都有自己独立的内存空间，一个进程可以有多个线程。 线程 一个线程就是进程中的一个执行任务（控制单元），负责当前进程中程序的执行。一个进程至少有一个线程，一个进程可以运行多个线程，多个线程可共享数据。 与进程不同的是同类的多个线程共享进程的堆和方法区资源，但每个线程有自己的程序">
 <meta property="og:type" content="article">
-<meta property="og:title" content="关于“!1”你用对了吗？——关于不同语言下的数据表示及其反补码">
-<meta property="og:url" content="https://jhr419.github.io/henry.github.io/2024/07/23/%E5%85%B3%E4%BA%8E%E2%80%98-1%E2%80%99%E4%BD%A0%E7%94%A8%E5%AF%B9%E4%BA%86%E5%90%97%EF%BC%9F%E2%80%94%E2%80%94%E5%85%B3%E4%BA%8E%E4%B8%8D%E5%90%8C%E8%AF%AD%E8%A8%80%E4%B8%8B%E7%9A%84%E6%95%B0%E6%8D%AE%E8%A1%A8%E7%A4%BA%E5%8F%8A%E5%85%B6%E5%8F%8D%E8%A1%A5%E7%A0%81/">
+<meta property="og:title" content="高级网络编程-第一周-线程">
+<meta property="og:url" content="https://jhr419.github.io/henry.github.io/2024/09/10/%E9%AB%98%E7%BA%A7%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B-%E7%AC%AC%E4%B8%80%E5%91%A8-%E7%BA%BF%E7%A8%8B/">
 <meta property="og:site_name" content="Henry&#39;s Blog">
-<meta property="og:description" content="摘要：笔者写的代码不多，能力有限，文章主要是将自己在实践过程中遇到的问题记录汇总，同时拓展学习一下知识，文章内容如有纰漏，或者各位大佬有更高的见解，欢迎联系笔者一起交流学习，联系方式在我的主页。  背景 我们先来看这样一段代码 123456789101112131415161718192021222324252627global cntcnt &#x3D; self.cntUnitENU &#x3D; np.arr">
+<meta property="og:description" content="进程与线程 进程 一个进程就是内存中运行的一个应用程序，比如在Windows系统中，一个运行的.exe就是一个进程。每个进程都有自己独立的内存空间，一个进程可以有多个线程。 线程 一个线程就是进程中的一个执行任务（控制单元），负责当前进程中程序的执行。一个进程至少有一个线程，一个进程可以运行多个线程，多个线程可共享数据。 与进程不同的是同类的多个线程共享进程的堆和方法区资源，但每个线程有自己的程序">
 <meta property="og:locale" content="zh_CN">
-<meta property="article:published_time" content="2024-07-23T03:53:46.000Z">
-<meta property="article:modified_time" content="2024-08-11T11:43:23.999Z">
+<meta property="article:published_time" content="2024-09-10T11:18:14.000Z">
+<meta property="article:modified_time" content="2024-09-11T15:29:05.952Z">
 <meta property="article:author" content="Henry Jin">
-<meta property="article:tag" content="数据结构">
+<meta property="article:tag" content="笔记">
+<meta property="article:tag" content="高级网络编程">
 <meta name="twitter:card" content="summary_large_image">
   
   
     <meta name="referrer" content="no-referrer-when-downgrade">
   
   
-  <title>关于“!1”你用对了吗？——关于不同语言下的数据表示及其反补码 - Henry&#39;s Blog</title>
+  <title>高级网络编程-第一周-线程 - Henry&#39;s Blog</title>
 
   <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
 
@@ -228,7 +229,7 @@
       <div class="banner-text text-center fade-in-up">
         <div class="h2">
           
-            <span id="subtitle" data-typed-text="关于“!1”你用对了吗？——关于不同语言下的数据表示及其反补码"></span>
+            <span id="subtitle" data-typed-text="高级网络编程-第一周-线程"></span>
           
         </div>
 
@@ -239,8 +240,8 @@
     
       <span class="post-meta">
         <i class="iconfont icon-date-fill" aria-hidden="true"></i>
-        <time datetime="2024-07-23 11:53" pubdate>
-          2024年7月23日 中午
+        <time datetime="2024-09-10 19:18" pubdate>
+          2024年9月10日 晚上
         </time>
       </span>
     
@@ -251,7 +252,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          918 字
+          1.4k 字
         
       </span>
     
@@ -262,7 +263,7 @@
         
         
         
-          8 分钟
+          12 分钟
         
       </span>
     
@@ -320,12 +321,12 @@
       <div class="container nopadding-x-md" id="board-ctn">
         <div id="board">
           <article class="post-content mx-auto">
-            <h1 id="seo-header">关于“!1”你用对了吗？——关于不同语言下的数据表示及其反补码</h1>
+            <h1 id="seo-header">高级网络编程-第一周-线程</h1>
             
               <p id="updated-time" class="note note-info" style="display: none">
                 
                   
-                    本文最后更新于 2024-08-11T19:43:23+08:00
+                    本文最后更新于 2024-09-11T23:29:05+08:00
                   
                   
 
@@ -335,33 +336,130 @@
             
               <div class="markdown-body">
                 
-                <hr>
-<p><strong>摘要：笔者写的代码不多，能力有限，文章主要是将自己在实践过程中遇到的问题记录汇总，同时拓展学习一下知识，文章内容如有纰漏，或者各位大佬有更高的见解，欢迎联系笔者一起交流学习，联系方式在我的主页。</strong></p>
-<hr>
-<h1>背景</h1>
-<p>我们先来看这样一段代码</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">global</span> cnt<br>cnt = self.cnt<br>UnitENU = np.array([<span class="hljs-number">1</span>,<span class="hljs-number">3</span>,<span class="hljs-number">3</span>])<br>...<br><span class="hljs-keyword">if</span> <span class="hljs-built_in">abs</span>(PosENU[<span class="hljs-number">0</span>] - UnitENU[<span class="hljs-number">0</span>]*(cnt+<span class="hljs-number">1</span>)) &gt;= <span class="hljs-number">0.2</span> :<br>&#123;<br>    ...<br>    target_pos = np.array([UnitENU[<span class="hljs-number">0</span>]*(cnt+<span class="hljs-number">1</span>), UnitENU[<span class="hljs-number">1</span>]*(cnt%<span class="hljs-number">2</span>), UnitENU[<span class="hljs-number">2</span>]])<br>    ...<br>&#125;<br><span class="hljs-keyword">elif</span> <span class="hljs-built_in">abs</span>( PosENU[<span class="hljs-number">0</span>] - UnitENU[<span class="hljs-number">0</span>]*(cnt+<span class="hljs-number">1</span>) ) &lt; <span class="hljs-number">0.2</span> :<br>    <span class="hljs-keyword">if</span>  <span class="hljs-built_in">abs</span>(PosENU[<span class="hljs-number">1</span>] - UnitENU[<span class="hljs-number">1</span>]*((cnt+<span class="hljs-number">1</span>)%<span class="hljs-number">2</span>)) &gt;= <span class="hljs-number">0.2</span> :<br>        target_pos = np.array([UnitENU[<span class="hljs-number">0</span>]*(cnt+<span class="hljs-number">1</span>), UnitENU[<span class="hljs-number">1</span>]*((cnt+<span class="hljs-number">1</span>)%<span class="hljs-number">2</span>)， UnitENU[<span class="hljs-number">2</span>]])<br>        <br>    <span class="hljs-keyword">if</span> ~(cnt%<span class="hljs-number">2</span>) <span class="hljs-keyword">and</span> <span class="hljs-built_in">abs</span>( PosENU[<span class="hljs-number">1</span>] - UnitENU[<span class="hljs-number">1</span>]*((cnt+<span class="hljs-number">1</span>)%<span class="hljs-number">2</span>) ) &lt; <span class="hljs-number">0.2</span> :<br>    &#123;<br>        ...<br>        cnt+=<span class="hljs-number">1</span><br>    &#125;<br>    <span class="hljs-keyword">elif</span> cnt%<span class="hljs-number">2</span> <span class="hljs-keyword">and</span> <span class="hljs-built_in">abs</span>(PosENU[<span class="hljs-number">1</span>] - <span class="hljs-number">0</span>) &lt; <span class="hljs-number">0.2</span>:<br>    &#123;<br>        ...<br>        cnt+=<span class="hljs-number">1</span><br>    &#125;<br>...<br><span class="hljs-comment">#将target_pos转换成速度指令通过ros节点pub</span><br>...<br></code></pre></td></tr></table></figure>
-<p>背景是一个无人机搜索任务，搜索路径是一个简单的S环路，这段代码是其中一段让无人机在不同路段区间内执行向左或向右平飞，通过计数器<strong>cnt</strong>判断当前无人机处于哪一部分路段。</p>
-<h2 id="问题描述">问题描述</h2>
-<p>这里 UnitENU[1] 是向左飞行的最大距离，是一个常数，也就是说当无人机在左侧最远点±0.2米的范围内，并且当<strong>cnt</strong>为偶数时才会进入第一个判断块。</p>
-<p>但是实际上机测试发现无人机只会进入第一个判断中，当到达左侧最远点会进入语句块，这没问题，此时目标会更新在正前方一个单位长度的位置，当无人机向前飞行到达目标范围内,按理不应该更新计数器，同时开始向右飞到右侧最远点，当飞到最右侧才会更新计数器。</p>
-<p>但是每次当我在左侧向前飞行一个单位长度后，都会直接更新计数器，导致会跳过向右平飞的路径节点，直接从左边斜向前飞向下一个节点。</p>
-<h1>解决方案</h1>
-<p>之后将判断语句改为如下，问题解决。</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><code class="hljs Python">...<br>    <span class="hljs-keyword">if</span> cnt%<span class="hljs-number">2</span> == <span class="hljs-number">0</span> <span class="hljs-keyword">and</span> <span class="hljs-built_in">abs</span>( PosENU[<span class="hljs-number">1</span>] - UnitENU[<span class="hljs-number">1</span>]*((cnt+<span class="hljs-number">1</span>)%<span class="hljs-number">2</span>) ) &lt; <span class="hljs-number">0.2</span> :<br>    &#123;<br>        ...<br>        cnt+=<span class="hljs-number">1</span><br>    &#125;<br>    <span class="hljs-keyword">elif</span> cnt%<span class="hljs-number">2</span> == <span class="hljs-number">1</span> <span class="hljs-keyword">and</span> <span class="hljs-built_in">abs</span>(PosENU[<span class="hljs-number">1</span>] - <span class="hljs-number">0</span>) &lt; <span class="hljs-number">0.2</span>:<br>    &#123;<br>        ...<br>        cnt+=<span class="hljs-number">1</span><br>    &#125;<br>...<br></code></pre></td></tr></table></figure>
-<h1>问题分析</h1>
-<p>由于笔者之前基本都是写C语言程序，因此很长时间都一直用C语言的思维在写python的代码（还被师兄吐槽你这代码风格太C了），因此在debug时，一直认为这里对计数器的处理不存在问题。</p>
-<p>通过在终端打印变量测试，发现每次<strong>cnt</strong>的更新都是通过第一个判断块执行，似乎说明 ~(cnt%2) 根本不起作用，值永远为<strong>true</strong>，或者说，是一个非0数，所以每次只要在左侧的最新目标点位置范围内就会触发计数器更新。</p>
-<p>但是在修改代码后，可以看到，cnt%2 的值仍然可以在 0 ，1之间改变。</p>
-<p>难道python中表达式 ~1 的值不是 0？</p>
-<h2 id="验证猜想">验证猜想</h2>
-<p>写下如下代码</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs Python"><span class="hljs-built_in">print</span>(~<span class="hljs-number">1</span>)<br><br>输出：-<span class="hljs-number">2</span><br></code></pre></td></tr></table></figure>
-<p>诶？ ~1的结果不应该是0吗，为什么打印输出 -2 呢？<br>
-要不我们试着打印出这个过程中两个数的二进制数来看看。</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs Python"><span class="hljs-built_in">print</span>(<span class="hljs-built_in">bin</span>(<span class="hljs-number">1</span>))<br><span class="hljs-built_in">print</span>(<span class="hljs-built_in">bin</span>(-<span class="hljs-number">2</span>))<br><br>输出： <br><span class="hljs-number">00000000</span> <span class="hljs-number">00000000</span> <span class="hljs-number">00000000</span> 00000001<br><span class="hljs-number">11111111</span> <span class="hljs-number">11111111</span> <span class="hljs-number">11111111</span> <span class="hljs-number">11111110</span><br></code></pre></td></tr></table></figure>
-<p>答案一目了然了不是吗？</p>
-<p>在python中，整数以32位二进制数存储，当对一个整数使用‘~‘操作，即按位取反操作符，则32位全部取反，而取反的结果0xFFFFFFFE正是-2的二进制补码，所以打印出来的结果就是-2</p>
+                <h1>进程与线程</h1>
+<h2 id="进程">进程</h2>
+<p>一个进程就是内存中运行的一个应用程序，比如在Windows系统中，一个运行的.exe就是一个进程。每个进程都有自己独立的内存空间，一个进程可以有多个线程。</p>
+<h2 id="线程">线程</h2>
+<p>一个线程就是进程中的一个执行任务（控制单元），负责当前进程中程序的执行。一个进程至少有一个线程，一个进程可以运行多个线程，多个线程可共享数据。</p>
+<p>与进程不同的是同类的多个线程共享进程的堆和方法区资源，但每个线程有自己的程序计数器、虚拟机栈和本地方法栈，所以系统在产生一个线程，或是在各个线程之间作切换工作时，负担要比进程小得多，也正因为如此，线程也被称为轻量级进程。</p>
+<h3 id="区别与联系">区别与联系</h3>
+<ol>
+<li>A process runs independently and isolated from other processes.</li>
+<li>Aprocess cannot directly access shared data in other processes.x</li>
+</ol>
+<h3 id="未完">未完</h3>
+<h1>并存编程相关概念</h1>
+<ol>
+<li>Atomicity</li>
+<li>Visibility</li>
+<li>Order of execution</li>
+<li>Critical code</li>
+</ol>
+<h1>Thread 类</h1>
+<p>· Thread类会执行编程者线程中的内容逻辑</p>
+<p>· 线程的内容逻辑存在于 <strong>run()</strong> 方法</p>
+<p>· Thread类管理所有运行中的线程</p>
+<h2 id="创建一个线程">创建一个线程</h2>
+<p>Java 提供了三种创建线程的方法：</p>
+<ol>
+<li>通过实现 Runnable 接口，并在类中创建Thread对象</li>
+<li>通过继承 Thread 类本身，需要实现超类中的待实现的方法run()</li>
+<li>通过 Callable 和 Future 创建线程。</li>
+</ol>
+<h3 id="方式一：实现Runnable-接口">方式一：实现Runnable 接口</h3>
+<p>Runnable接口要求类必须实现run()方法，否则会compile error</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><code class="hljs Java"><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">MyFirstThreadRunnable</span> <span class="hljs-keyword">implements</span> <span class="hljs-title class_">Runnable</span> &#123;<br><br>	<span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">run</span><span class="hljs-params">()</span> &#123;<br>		<span class="hljs-comment">//stuff here</span><br>	&#125;<br><br>	<span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">main</span><span class="hljs-params">(String[] args)</span> &#123;<br>		<span class="hljs-comment">// This approach uses a class that implements the Runnable interface</span><br>		<span class="hljs-comment">// this is the recommended way.</span><br>		<span class="hljs-type">MyFirstThreadRunnable</span> <span class="hljs-variable">myFirstThreadRunnable</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">MyFirstThreadRunnable</span>();<br>		<span class="hljs-type">Thread</span> <span class="hljs-variable">thread</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">Thread</span>(myFirstThreadRunnable);<br>		thread.start();<br>	&#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>或者可以更简单的代码实现：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs Java"><span class="hljs-type">Thread</span> <span class="hljs-variable">t</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">Thread</span>(<span class="hljs-keyword">new</span> <span class="hljs-title class_">Runnable</span>())<br>&#123;   <br>    <span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">run</span><span class="hljs-params">()</span><br>    &#123;<br>        <span class="hljs-comment">//stuff here</span><br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+<h3 id="方式二：继承Thread类">方式二：继承Thread类</h3>
+<p>需要override run()方法</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><code class="hljs Java"><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">MyThread</span> <span class="hljs-keyword">extends</span> <span class="hljs-title class_">Thread</span> &#123;<br><br>	<span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">run</span><span class="hljs-params">()</span> &#123;<br>		<span class="hljs-comment">//stuff here</span><br>	&#125;<br><br>	<span class="hljs-comment">// We&#x27;ll now create a thread </span><br>	<span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">main</span><span class="hljs-params">(String[] args)</span> &#123;<br>		<span class="hljs-comment">// This approach uses a class the extends Thread</span><br>		<span class="hljs-type">MyFirstThreadExtend</span> <span class="hljs-variable">myFirstThreadExtend</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">MyFirstThreadExtend</span>();<br>		myFirstThreadExtend.start();<br>	&#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+<h3 id="方式三：通过-Callable-和-Future-创建线程（略）">方式三：通过 Callable 和 Future 创建线程（略）</h3>
+<p><strong>思考：哪种方式更好呢？</strong></p>
+<p>通过继承Thread类的方式，可以完成多线程的建立。</p>
+<p>但是这种方式有一个局限性，如果一个类已经有了自己的父类，就不可以继承Thread类，因为java是单继承。</p>
+<p>可是该类中的还有部分代码需要被多个线程同时执行。这时怎么办呢？</p>
+<p>只有对该类进行额外的功能扩展，java就提供了一个接口Runnable。</p>
+<p>这个接口中定义了run方法，其实run方法的定义就是为了存储多线程要运行的代码。</p>
+<p><strong>所以，通常创建线程都用第二种方式。</strong></p>
+<p>因为实现Runnable接口可以避免单继承的局限性。</p>
+<p>将多线程要运行的代码的位置单独定义到接口中，这为其他类进行功能扩展提供了前提。</p>
+<p>因为Thread类在描述线程时，其内部定义的run方法，也来自于Runnable接口。</p>
+<p>实现Runnable接口可以避免单继承的局限性，继承Thread是可以对Thread类中的方法进行子类复写的。</p>
+<p>如果不需要做这个复写动作的话，只为定义线程代码存放位置，实现Runnable接口更方便一些。</p>
+<p>因为Runnable接口将线程要执行的任务封装成了对象。</p>
+<h1>线程的常用方法</h1>
+<table>
+<thead>
+<tr>
+<th>方法名</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>public void start()</td>
+<td>使该线程开始执行；Java 虚拟机调用该线程的 run 方法。</td>
+</tr>
+<tr>
+<td>public void run()</td>
+<td>如果该线程是使用独立的 Runnable 运行对象构造的，则调用该 Runnable 对象的 run 方法；否则，该方法不执行任何操作并返回。</td>
+</tr>
+<tr>
+<td>static void sleep(long millis)</td>
+<td>Can make a thread sleep for a certain number of milliseconds</td>
+</tr>
+<tr>
+<td>public final void setName(String name)</td>
+<td>改变线程名称，使之与参数 name 相同。</td>
+</tr>
+<tr>
+<td>public final void setPriority(int priority)</td>
+<td>更改线程的优先级。</td>
+</tr>
+<tr>
+<td>public final void setDaemon(boolean on)</td>
+<td>将该线程标记为守护线程或用户线程。</td>
+</tr>
+<tr>
+<td>public final void join(long millisec)</td>
+<td>等待该线程终止的时间最长为 millis 毫秒。</td>
+</tr>
+<tr>
+<td>public void interrupt()</td>
+<td>中断线程。</td>
+</tr>
+<tr>
+<td>public final boolean isAlive()</td>
+<td>测试线程是否处于活动状态。</td>
+</tr>
+</tbody>
+</table>
+<h2 id="static-void-sleep-long-millis">static void sleep(long millis)</h2>
+<p>可以使得进程休眠固定时间长度，单位：毫秒</p>
+<p>不能控制其它线程休眠</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><code class="hljs Java"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">run</span><span class="hljs-params">()</span><br>&#123;<br>    <span class="hljs-keyword">try</span><br>    &#123;<br>        Thread.sleep(<span class="hljs-number">1000</span>);<br>    &#125;<br>    <span class="hljs-keyword">catch</span>(InterruptedException e)<br>    &#123;<br>        <span class="hljs-comment">//一些线程操作可能抛出异常</span><br>        e.printStackTrace();<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+<h2 id="static-voidyield">static void	yield()</h2>
+<p>When a thread executes a thread yield,</p>
+<p>– the executing thread is suspended and</p>
+<p>– the CPU is given to some other runnable thread</p>
+<p>• This thread will wait until the CPU becomes available again • Technically, in process scheduler’s terminology,</p>
+<p>– the executing thread is returned to the ready queue of the processor and– waits for its next turn</p>
+<p>当一个线程执行yield()时，正在执行的线程会被挂起，CPU会将资源分配给其它可执行线程，直到CPU资源对该线程再次可用</p>
+<p>在进程调度程序的术语中，正在执行的线程会转变到处理器的准备队列中，并且等待下一次变换状态</p>
+<h1>InterruptedException</h1>
+<p>这个exception 会在当线程处于睡眠状态时被中断而抛出，可以很好的处理中断</p>
+<h2 id="Interrupt-flag">Interrupt flag</h2>
+<p>每个线程对象都包含一个中断标志变量，</p>
+<p>其它线程可以改变这个标志为true来中断该线程</p>
+<p>执行t1.interrupt()，那么t1就是我们要中断的线程</p>
+<p>方法应该检查这个标志：</p>
+<p>如果为true：则立刻结束当前执行的方法；</p>
+<p>如果为false：照常进行该方法</p>
+<p>当实现实现方法时，将对中断标志的检查纳入你的方法中是一个好习惯。</p>
+<p>这意味着在编写多线程代码时，你应该在方法中定期检查线程的中断标志（interrupt flag）。如果标志被设置为 true，则方法应立即结束（返回）；如果标志为 false，则继续正常执行。</p>
+<p>这样做可以使线程在需要中断时及时响应，提高程序的可控性和稳定性。</p>
+<h2 id="线程如何响应中断">线程如何响应中断</h2>
 
                 
               </div>
@@ -380,8 +478,15 @@
     
       <span class="category-chain">
         
-  <a href="/henry.github.io/categories/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/" class="category-chain-item">数据结构</a>
+  <a href="/henry.github.io/categories/%E7%AC%94%E8%AE%B0/" class="category-chain-item">笔记</a>
   
+  
+    <span>></span>
+    
+  <a href="/henry.github.io/categories/%E7%AC%94%E8%AE%B0/%E9%AB%98%E7%BA%A7%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B/" class="category-chain-item">高级网络编程</a>
+  
+  
+
   
 
       </span>
@@ -395,7 +500,9 @@
     <div class="post-meta">
       <i class="iconfont icon-tags"></i>
       
-        <a href="/henry.github.io/tags/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/" class="print-no-link">#数据结构</a>
+        <a href="/henry.github.io/tags/%E7%AC%94%E8%AE%B0/" class="print-no-link">#笔记</a>
+      
+        <a href="/henry.github.io/tags/%E9%AB%98%E7%BA%A7%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B/" class="print-no-link">#高级网络编程</a>
       
     </div>
   
@@ -407,8 +514,8 @@
 
   <div class="license-box my-3">
     <div class="license-title">
-      <div>关于“!1”你用对了吗？——关于不同语言下的数据表示及其反补码</div>
-      <div>https://jhr419.github.io/henry.github.io/2024/07/23/关于‘-1’你用对了吗？——关于不同语言下的数据表示及其反补码/</div>
+      <div>高级网络编程-第一周-线程</div>
+      <div>https://jhr419.github.io/henry.github.io/2024/09/10/高级网络编程-第一周-线程/</div>
     </div>
     <div class="license-meta">
       
@@ -420,13 +527,13 @@
       
         <div class="license-meta-item license-meta-date">
           <div>发布于</div>
-          <div>2024年7月23日</div>
+          <div>2024年9月10日</div>
         </div>
       
       
         <div class="license-meta-item license-meta-date">
           <div>更新于</div>
-          <div>2024年8月11日</div>
+          <div>2024年9月11日</div>
         </div>
       
       
@@ -457,18 +564,12 @@
                   <article class="post-prev col-6">
                     
                     
-                      <a href="/henry.github.io/2024/09/10/%E6%89%A9%E6%95%A3%E6%A8%A1%E5%9E%8B%E2%80%94%E7%90%86%E8%AE%BA%E4%B8%8E%E6%8B%93%E5%B1%95/" title="扩散模型—理论与拓展">
-                        <i class="iconfont icon-arrowleft"></i>
-                        <span class="hidden-mobile">扩散模型—理论与拓展</span>
-                        <span class="visible-mobile">上一篇</span>
-                      </a>
-                    
                   </article>
                   <article class="post-next col-6">
                     
                     
-                      <a href="/henry.github.io/2024/06/08/Java%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E2%80%94%E7%AC%AC%E5%9B%9B%E5%91%A8-Garbage-Collection/" title="Java学习笔记—第四周-Garbage-Collection">
-                        <span class="hidden-mobile">Java学习笔记—第四周-Garbage-Collection</span>
+                      <a href="/henry.github.io/2024/09/10/%E6%89%A9%E6%95%A3%E6%A8%A1%E5%9E%8B%E2%80%94%E7%90%86%E8%AE%BA%E4%B8%8E%E6%8B%93%E5%B1%95/" title="扩散模型—理论与拓展">
+                        <span class="hidden-mobile">扩散模型—理论与拓展</span>
                         <span class="visible-mobile">下一篇</span>
                         <i class="iconfont icon-arrowright"></i>
                       </a>
