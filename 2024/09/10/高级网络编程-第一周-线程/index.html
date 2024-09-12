@@ -26,7 +26,7 @@
 <meta property="og:description" content="进程与线程 进程 一个进程就是内存中运行的一个应用程序，比如在Windows系统中，一个运行的.exe就是一个进程。每个进程都有自己独立的内存空间，一个进程可以有多个线程。 线程 一个线程就是进程中的一个执行任务（控制单元），负责当前进程中程序的执行。一个进程至少有一个线程，一个进程可以运行多个线程，多个线程可共享数据。 与进程不同的是同类的多个线程共享进程的堆和方法区资源，但每个线程有自己的程序">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2024-09-10T11:18:14.000Z">
-<meta property="article:modified_time" content="2024-09-12T01:13:02.769Z">
+<meta property="article:modified_time" content="2024-09-12T13:35:04.336Z">
 <meta property="article:author" content="Henry Jin">
 <meta property="article:tag" content="笔记">
 <meta property="article:tag" content="高级网络编程">
@@ -252,7 +252,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          1.4k 字
+          1.7k 字
         
       </span>
     
@@ -263,7 +263,7 @@
         
         
         
-          12 分钟
+          15 分钟
         
       </span>
     
@@ -326,7 +326,7 @@
               <p id="updated-time" class="note note-info" style="display: none">
                 
                   
-                    本文最后更新于 2024-09-12T09:13:02+08:00
+                    本文最后更新于 2024-09-12T21:35:04+08:00
                   
                   
 
@@ -461,6 +461,28 @@
 <p>这样做可以使线程在需要中断时及时响应，提高程序的可控性和稳定性。</p>
 <h2 id="线程如何响应中断">线程如何响应中断</h2>
 <p>如果一个线程处于sleeping或者waiting状态下（即sleep(), wait()被调用），此时使用interrupt()，会退出sleeping或者waiting的状态，通过设置flag为false，并抛出InterruptedException</p>
+<p>如果一个线程不处于sleeping或者waiting状态，当调用interrupt()，会照常执行原本的内容，不会中断线程，只会将interrupt flag 设置为true</p>
+<h2 id="何时中断线程">何时中断线程</h2>
+<ol>
+<li>当线程处于堵塞状态（blocked），堵塞即线程此时无法做任何事情</li>
+<li>当一个线程处于sleep状态，但我们想要等待它完成，那么我们就可以中断它然后继续我们的任务</li>
+</ol>
+<h2 id="线程堵塞的原因">线程堵塞的原因</h2>
+<ol>
+<li>线程可能正等待monitor lock（监视器锁）</li>
+<li>线程可能被wait()挂起了，并且会变成runnable状态</li>
+</ol>
+<p>sleep()和wait()/notify()可能是线程被阻塞的最主要的情况</p>
+<p>调用interrupt()可以强制使得线程脱离堵塞</p>
+<h2 id="Thread线程状态">Thread线程状态</h2>
+<p>细节可见：<br>
+<a target="_blank" rel="noopener" href="https://docs.oracle.com/javase/7/docs/api/java/lang/Thread.State.html">https://docs.oracle.com/javase/7/docs/api/java/lang/Thread.State.html</a></p>
+<h1>线程间配合 Coordinating between Threads</h1>
+<h2 id="join">join()</h2>
+<p>让主线程等待，直到其它线程不再活动为止</p>
+<p>join()方法可以等待其它线程停止</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs Java"><span class="hljs-keyword">try</span><br>&#123;<br>    <span class="hljs-comment">//Wait for thread2 to die</span><br>    thread2.join();<br>&#125; <br><span class="hljs-keyword">catch</span>(InterruptedException e)<br>&#123;<br>    e.printStackTrace();<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>将会让当前进程等待线程2停止</p>
 
                 
               </div>
