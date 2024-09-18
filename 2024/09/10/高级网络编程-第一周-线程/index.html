@@ -26,7 +26,7 @@
 <meta property="og:description" content="进程与线程 进程 一个进程就是内存中运行的一个应用程序，比如在Windows系统中，一个运行的.exe就是一个进程。每个进程都有自己独立的内存空间，一个进程可以有多个线程。 线程 一个线程就是进程中的一个执行任务（控制单元），负责当前进程中程序的执行。一个进程至少有一个线程，一个进程可以运行多个线程，多个线程可共享数据。 与进程不同的是同类的多个线程共享进程的堆和方法区资源，但每个线程有自己的程序">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2024-09-10T11:18:14.000Z">
-<meta property="article:modified_time" content="2024-09-12T13:35:04.336Z">
+<meta property="article:modified_time" content="2024-09-15T11:02:40.285Z">
 <meta property="article:author" content="Henry Jin">
 <meta property="article:tag" content="笔记">
 <meta property="article:tag" content="高级网络编程">
@@ -252,7 +252,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          1.7k 字
+          2.3k 字
         
       </span>
     
@@ -263,7 +263,7 @@
         
         
         
-          15 分钟
+          20 分钟
         
       </span>
     
@@ -326,7 +326,7 @@
               <p id="updated-time" class="note note-info" style="display: none">
                 
                   
-                    本文最后更新于 2024-09-12T21:35:04+08:00
+                    本文最后更新于 2024-09-15T19:02:40+08:00
                   
                   
 
@@ -347,7 +347,6 @@
 <li>A process runs independently and isolated from other processes.</li>
 <li>Aprocess cannot directly access shared data in other processes.x</li>
 </ol>
-<h3 id="未完">未完</h3>
 <h1>并存编程相关概念</h1>
 <ol>
 <li>Atomicity</li>
@@ -367,10 +366,27 @@
 <li>通过 Callable 和 Future 创建线程。</li>
 </ol>
 <h3 id="方式一：实现Runnable-接口">方式一：实现Runnable 接口</h3>
-<p>Runnable接口要求类必须实现run()方法，否则会compile error</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><code class="hljs Java"><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">MyFirstThreadRunnable</span> <span class="hljs-keyword">implements</span> <span class="hljs-title class_">Runnable</span> &#123;<br><br>	<span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">run</span><span class="hljs-params">()</span> &#123;<br>		<span class="hljs-comment">//stuff here</span><br>	&#125;<br><br>	<span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">main</span><span class="hljs-params">(String[] args)</span> &#123;<br>		<span class="hljs-comment">// This approach uses a class that implements the Runnable interface</span><br>		<span class="hljs-comment">// this is the recommended way.</span><br>		<span class="hljs-type">MyFirstThreadRunnable</span> <span class="hljs-variable">myFirstThreadRunnable</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">MyFirstThreadRunnable</span>();<br>		<span class="hljs-type">Thread</span> <span class="hljs-variable">thread</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">Thread</span>(myFirstThreadRunnable);<br>		thread.start();<br>	&#125;<br>&#125;<br></code></pre></td></tr></table></figure>
-<p>或者可以更简单的代码实现：</p>
+<p>声明一个Runnable的类</p>
+<p>实现run方法</p>
+<p>新建Thread示例，并将类放入实例</p>
+<ul>
+<li>Runnable接口要求类必须实现run()方法，否则会compile error</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><code class="hljs Java"><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">MyRunnable</span> <span class="hljs-keyword">implements</span> <span class="hljs-title class_">Runnable</span> &#123;<br><br>	<span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">run</span><span class="hljs-params">()</span> &#123;<br>		<span class="hljs-comment">//stuff here</span><br>	&#125;<br><br>	<span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">main</span><span class="hljs-params">(String[] args)</span> &#123;<br>		<span class="hljs-comment">// This approach uses a class that implements the Runnable interface</span><br>		<span class="hljs-comment">// this is the recommended way.</span><br>		<span class="hljs-type">MyRunnable</span> <span class="hljs-variable">myRunnable</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">MyRunnable</span>();<br>		<span class="hljs-type">Thread</span> <span class="hljs-variable">thread</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">Thread</span>(myRunnable);<br>		thread.start();<br>	&#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+<ul>
+<li>或者可以更简单的代码实现：</li>
+</ul>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs Java"><span class="hljs-type">Thread</span> <span class="hljs-variable">t</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">Thread</span>(<span class="hljs-keyword">new</span> <span class="hljs-title class_">Runnable</span>())<br>&#123;   <br>    <span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">run</span><span class="hljs-params">()</span><br>    &#123;<br>        <span class="hljs-comment">//stuff here</span><br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+<ul>
+<li>倘若要多次使用相同的runnable：</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs Java"><span class="hljs-type">MyFirstRunnable</span> <span class="hljs-variable">runnable</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">MyFirstRunnable</span>();<br><br><span class="hljs-keyword">for</span>(<span class="hljs-type">int</span> <span class="hljs-variable">i</span> <span class="hljs-operator">=</span> <span class="hljs-number">0</span>; i &lt;<span class="hljs-number">25</span>; i++)<br>&#123;<br>    <span class="hljs-keyword">new</span> <span class="hljs-title class_">Thread</span>(runnable).start();<br>&#125;<br></code></pre></td></tr></table></figure>
+<ul>
+<li>currentThread()</li>
+</ul>
+<p>这个方法可以返回当前执行的线程的reference</p>
+<p>示例：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs Java"><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">MyThread</span> <span class="hljs-keyword">implements</span> <span class="hljs-title class_">Runnable</span><br>&#123;<br>    <span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">run</span><span class="hljs-params">()</span><br>    &#123;<br>        Thread.currentThread().interrupt();<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
 <h3 id="方式二：继承Thread类">方式二：继承Thread类</h3>
 <p>需要override run()方法</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><code class="hljs Java"><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">MyThread</span> <span class="hljs-keyword">extends</span> <span class="hljs-title class_">Thread</span> &#123;<br><br>	<span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">run</span><span class="hljs-params">()</span> &#123;<br>		<span class="hljs-comment">//stuff here</span><br>	&#125;<br><br>	<span class="hljs-comment">// We&#x27;ll now create a thread </span><br>	<span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">main</span><span class="hljs-params">(String[] args)</span> &#123;<br>		<span class="hljs-comment">// This approach uses a class the extends Thread</span><br>		<span class="hljs-type">MyFirstThreadExtend</span> <span class="hljs-variable">myFirstThreadExtend</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">MyFirstThreadExtend</span>();<br>		myFirstThreadExtend.start();<br>	&#125;<br>&#125;<br></code></pre></td></tr></table></figure>
@@ -475,6 +491,17 @@
 <p>sleep()和wait()/notify()可能是线程被阻塞的最主要的情况</p>
 <p>调用interrupt()可以强制使得线程脱离堵塞</p>
 <h2 id="Thread线程状态">Thread线程状态</h2>
+<p>在Java程序中，一个线程对象只能调用一次start()方法启动新线程，并在新线程中执行run()方法。<br>
+一旦run()方法执行完毕，线程就结束了。因此，Java线程的状态有以下几种：</p>
+<ul>
+<li>New：新创建的线程，尚未执行；</li>
+<li>Runnable：运行中的线程，正在执行run()方法的Java代码；</li>
+<li>Blocked：运行中的线程，因为某些操作被阻塞而挂起；</li>
+<li>Waiting：运行中的线程，因为某些操作在等待中；</li>
+<li>Timed Waiting：运行中的线程，因为执行sleep()方法正在计时等待；</li>
+<li>Terminated：线程已终止，因为run()方法执行完毕。</li>
+</ul>
+<figure class="highlight mipsasm"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><code class="hljs mipsasm">          ┌─────────────┐<br>          │     New     │<br>          └─────────────┘<br>                 │<br>                 ▼<br>┌ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ┐<br>  ┌─────────────┐ ┌─────────────┐<br>│ │  Runnable   │ │   <span class="hljs-keyword">Blocked </span>  │ │<br>  └─────────────┘ └─────────────┘<br>│ ┌─────────────┐ ┌─────────────┐ │<br>  │   <span class="hljs-keyword">Waiting </span>  │ │Timed <span class="hljs-keyword">Waiting│</span><br><span class="hljs-keyword"></span>│ └─────────────┘ └─────────────┘ │<br>  ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─<br>                 │<br>                 ▼<br>          ┌─────────────┐<br>          │ Terminated  │<br>          └─────────────┘<br></code></pre></td></tr></table></figure>
 <p>细节可见：<br>
 <a target="_blank" rel="noopener" href="https://docs.oracle.com/javase/7/docs/api/java/lang/Thread.State.html">https://docs.oracle.com/javase/7/docs/api/java/lang/Thread.State.html</a></p>
 <h1>线程间配合 Coordinating between Threads</h1>
@@ -483,6 +510,42 @@
 <p>join()方法可以等待其它线程停止</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs Java"><span class="hljs-keyword">try</span><br>&#123;<br>    <span class="hljs-comment">//Wait for thread2 to die</span><br>    thread2.join();<br>&#125; <br><span class="hljs-keyword">catch</span>(InterruptedException e)<br>&#123;<br>    e.printStackTrace();<br>&#125;<br></code></pre></td></tr></table></figure>
 <p>将会让当前进程等待线程2停止</p>
+<h1>Interrupt</h1>
+<h2 id="什么是interrupt">什么是interrupt</h2>
+<p>如果线程需要执行一个长时间任务，就可能中断线程。中断线程就是其它线程给该线程发一个信号，该线程收到信号后结束执行run()方法，使得自身线程能立即结束运行</p>
+<h1>总结本节用到的方法</h1>
+<ul>
+<li>Thread.sleep(1000);
+<ul>
+<li>Pauses current thread from executing for 1000 milliseconds</li>
+</ul>
+</li>
+<li>myThread.join();
+<ul>
+<li>
+<p>Pauses current thread until myThread has finished executing,</p>
+<p>i.e., myThread’s run() method has finished</p>
+</li>
+</ul>
+</li>
+<li>myThread.interrupt();
+<ul>
+<li>Send an interrupt signal to myThread</li>
+<li>This will set myThread’s interrupt flag to true</li>
+</ul>
+</li>
+</ul>
+<p>start() 和 run() 的区别</p>
+<p>start是创建新的进程，并且运行run方法中的代码</p>
+<p>run是不会创建新的进程，run方法内部的代码将在当前线程上运行。</p>
+<p>如果你想要运行需要消耗大量时间的任务，你最好使用start方法，</p>
+<p>否则在你调用run方法的时候，你的主线程将会被卡住，</p>
+<p>这是因为，调用run方法，其实是在调用一个普通的Java方法，是顺序执行的，</p>
+<p>必须等待run方法体里的内容执行完毕后才能执行别的代码块，</p>
+<p>而调用start()方法的话，则是启动一个新线程，等待JVM来调用run()方法体里的内容，</p>
+<p>所以可能先执行别的代码块而后执行run()方法体。</p>
+<p>另外一个区别在于，一但一个线程被启动，你不能重复调用该thread对象的start方法，</p>
+<p>调用已经启动线程的start方法将会报IllegalStateException异常，而你却可以重复调用run方法。</p>
 
                 
               </div>
@@ -556,7 +619,7 @@
       
         <div class="license-meta-item license-meta-date">
           <div>更新于</div>
-          <div>2024年9月12日</div>
+          <div>2024年9月15日</div>
         </div>
       
       
