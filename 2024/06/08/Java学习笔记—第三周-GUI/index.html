@@ -18,23 +18,23 @@
   <meta name="author" content="Henry Jin">
   <meta name="keywords" content="">
   
-    <meta name="description" content="GUI编程的三个主要概念  Component：用户能看到的能交互的对象 Container：可以放其它component的component Event：由用户触发的action  设计GUI大致包括：  创建components 放入containers 编写程序以响应对应事件  基本框架示例  ![](pic1.png) 一个简单的完整的JavaGUI应用程序如图所示，其基本结构如下：  一">
+    <meta name="description" content="GUI编程的三个主要概念  Component：用户能看到的能交互的对象 Container：可以放其它component的component Event：由用户触发的action  设计GUI大致包括：  创建components 放入containers 编写程序以响应对应事件  基本框架示例  一个简单的完整的JavaGUI应用程序如图所示，其基本结构如下：  一个顶层的容器——Frame，">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Java学习笔记—第三周-GUI">
 <meta property="og:url" content="https://jhr419.github.io/henry.github.io/2024/06/08/Java%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E2%80%94%E7%AC%AC%E4%B8%89%E5%91%A8-GUI/">
 <meta property="og:site_name" content="Henry&#39;s Blog">
-<meta property="og:description" content="GUI编程的三个主要概念  Component：用户能看到的能交互的对象 Container：可以放其它component的component Event：由用户触发的action  设计GUI大致包括：  创建components 放入containers 编写程序以响应对应事件  基本框架示例  ![](pic1.png) 一个简单的完整的JavaGUI应用程序如图所示，其基本结构如下：  一">
+<meta property="og:description" content="GUI编程的三个主要概念  Component：用户能看到的能交互的对象 Container：可以放其它component的component Event：由用户触发的action  设计GUI大致包括：  创建components 放入containers 编写程序以响应对应事件  基本框架示例  一个简单的完整的JavaGUI应用程序如图所示，其基本结构如下：  一个顶层的容器——Frame，">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="https://jhr419.github.io/henry.github.io/henry.github.io/2024/06/08/Java%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E2%80%94%E7%AC%AC%E4%B8%89%E5%91%A8-GUI/pic1.png">
-<meta property="og:image" content="https://jhr419.github.io/henry.github.io/henry.github.io/2024/06/08/Java%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E2%80%94%E7%AC%AC%E4%B8%89%E5%91%A8-GUI/pic2.png">
-<meta property="og:image" content="https://jhr419.github.io/henry.github.io/henry.github.io/2024/06/08/Java%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E2%80%94%E7%AC%AC%E4%B8%89%E5%91%A8-GUI/pic3.png">
+<meta property="og:image" content="https://github.com/jhr419/henry.github.io/blob/master/img/Java%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E2%80%94%E7%AC%AC%E4%B8%89%E5%91%A8-GUI/pic1.png?raw=true">
+<meta property="og:image" content="https://github.com/jhr419/henry.github.io/blob/master/img/Java%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E2%80%94%E7%AC%AC%E4%B8%89%E5%91%A8-GUI/pic2.png?raw=true">
+<meta property="og:image" content="https://github.com/jhr419/henry.github.io/blob/master/img/Java%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E2%80%94%E7%AC%AC%E4%B8%89%E5%91%A8-GUI/pic3.png?raw=true">
 <meta property="article:published_time" content="2024-06-08T00:50:41.000Z">
-<meta property="article:modified_time" content="2024-06-08T12:18:58.582Z">
+<meta property="article:modified_time" content="2024-09-27T08:27:41.081Z">
 <meta property="article:author" content="Henry Jin">
 <meta property="article:tag" content="Java">
 <meta property="article:tag" content="笔记">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:image" content="https://jhr419.github.io/henry.github.io/henry.github.io/2024/06/08/Java%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E2%80%94%E7%AC%AC%E4%B8%89%E5%91%A8-GUI/pic1.png">
+<meta name="twitter:image" content="https://github.com/jhr419/henry.github.io/blob/master/img/Java%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E2%80%94%E7%AC%AC%E4%B8%89%E5%91%A8-GUI/pic1.png?raw=true">
   
   
     <meta name="referrer" content="no-referrer-when-downgrade">
@@ -330,7 +330,7 @@
               <p id="updated-time" class="note note-info" style="display: none">
                 
                   
-                    本文最后更新于 2024-06-08T20:18:58+08:00
+                    本文最后更新于 2024-09-27T16:27:41+08:00
                   
                   
 
@@ -353,8 +353,7 @@
 <li>编写程序以响应对应事件</li>
 </ol>
 <h1>基本框架示例</h1>
-<img src="/henry.github.io/henry.github.io/2024/06/08/Java%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E2%80%94%E7%AC%AC%E4%B8%89%E5%91%A8-GUI/pic1.png" srcset="/henry.github.io/img/loading.gif" lazyload alt="pic1">
-![](pic1.png)
+<p><img src="https://github.com/jhr419/henry.github.io/blob/master/img/Java%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E2%80%94%E7%AC%AC%E4%B8%89%E5%91%A8-GUI/pic1.png?raw=true" srcset="/henry.github.io/img/loading.gif" lazyload alt="pic1"></p>
 <p>一个简单的完整的JavaGUI应用程序如图所示，其基本结构如下：</p>
 <ol>
 <li>一个顶层的容器——Frame，用于呈现GUI所有内容</li>
@@ -362,8 +361,7 @@
 <li>组件component，包括但不限于按钮，标签，输入框。</li>
 </ol>
 <h1>Java中的容器和组件</h1>
-<img src="/henry.github.io/henry.github.io/2024/06/08/Java%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E2%80%94%E7%AC%AC%E4%B8%89%E5%91%A8-GUI/pic2.png" srcset="/henry.github.io/img/loading.gif" lazyload alt="pic2">  
-![](pic2.png)
+<p><img src="https://github.com/jhr419/henry.github.io/blob/master/img/Java%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E2%80%94%E7%AC%AC%E4%B8%89%E5%91%A8-GUI/pic2.png?raw=true" srcset="/henry.github.io/img/loading.gif" lazyload alt="pic2"></p>
 <p>在本轮学习中，没有涉及到JApplet类，详情见：</p>
 <p><a target="_blank" rel="noopener" href="https://www.runoob.com/java/java-applet-basics.html">https://www.runoob.com/java/java-applet-basics.html</a></p>
 <h1>搭建一个基本的GUI步骤</h1>
@@ -430,7 +428,7 @@
 <h1>Layout布局</h1>
 <p><a target="_blank" rel="noopener" href="http://t.csdnimg.cn/t1oP7">http://t.csdnimg.cn/t1oP7</a></p>
 <p>std JDK提供五种类以供实现布局管理</p>
-<img src="/henry.github.io/henry.github.io/2024/06/08/Java%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E2%80%94%E7%AC%AC%E4%B8%89%E5%91%A8-GUI/pic3.png" srcset="/henry.github.io/img/loading.gif" lazyload alt="pic3">
+<p><img src="https://github.com/jhr419/henry.github.io/blob/master/img/Java%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E2%80%94%E7%AC%AC%E4%B8%89%E5%91%A8-GUI/pic3.png?raw=true" srcset="/henry.github.io/img/loading.gif" lazyload alt="pic3"></p>
 <ul>
 <li>FlowLayout</li>
 <li>GridLayout</li>
@@ -544,7 +542,7 @@
       
         <div class="license-meta-item license-meta-date">
           <div>更新于</div>
-          <div>2024年6月8日</div>
+          <div>2024年9月27日</div>
         </div>
       
       
