@@ -29,7 +29,7 @@
 <meta property="og:image" content="https://jhr419.github.io/henry.github.io/henry.github.io/2024/09/28/public/img/VHDL%E7%94%B5%E8%B7%AF%E6%A8%A1%E5%9E%8B/img_1.png">
 <meta property="og:image" content="https://github.com/jhr419/henry.github.io/blob/master/img/VHDL%E7%94%B5%E8%B7%AF%E6%A8%A1%E5%9E%8B/img_1.png?raw=true">
 <meta property="article:published_time" content="2024-09-28T03:18:50.000Z">
-<meta property="article:modified_time" content="2024-09-28T03:43:33.974Z">
+<meta property="article:modified_time" content="2024-09-28T03:51:07.114Z">
 <meta property="article:author" content="Henry Jin">
 <meta property="article:tag" content="笔记">
 <meta property="article:tag" content="数字电路">
@@ -268,7 +268,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          187 字
+          364 字
         
       </span>
     
@@ -279,7 +279,7 @@
         
         
         
-          2 分钟
+          4 分钟
         
       </span>
     
@@ -342,7 +342,7 @@
               <p id="updated-time" class="note note-info" style="display: none">
                 
                   
-                    本文最后更新于 2024-09-28T11:43:33+08:00
+                    本文最后更新于 2024-09-28T11:51:07+08:00
                   
                   
 
@@ -369,8 +369,24 @@
 </ol>
 <p>也许你会认为使用图像对数字电路进行描述更为方便，但随着电路模块与电线增多，图像将会变得十分复杂</p>
 <p>更为明智的方式，是通过VHDL语言对电路进行描述（建模model it），然后将具体连接细节留给合成工具（合成器synthesiser）</p>
+<h2 id="数字系统设计流程">数字系统设计流程</h2>
 <p><img src="/henry.github.io/henry.github.io/2024/09/28/VHDL%E7%94%B5%E8%B7%AF%E6%A8%A1%E5%9E%8B/../public/img/VHDL%E7%94%B5%E8%B7%AF%E6%A8%A1%E5%9E%8B/img_1.png" srcset="/henry.github.io/img/loading.gif" lazyload alt><br>
-<img src="https://github.com/jhr419/henry.github.io/blob/master/img/VHDL%E7%94%B5%E8%B7%AF%E6%A8%A1%E5%9E%8B/img_1.png?raw=true" srcset="/henry.github.io/img/loading.gif" lazyload alt="设计数字电路流程"></p>
+<img src="https://github.com/jhr419/henry.github.io/blob/master/img/VHDL%E7%94%B5%E8%B7%AF%E6%A8%A1%E5%9E%8B/img_1.png?raw=true" srcset="/henry.github.io/img/loading.gif" lazyload alt="数字系统设计流程"></p>
+<ul>
+<li>电路系统设计者应该重点关心：最终的逻辑电路应该做什么，即：通过对数字系统的抽象化，提炼功能与接口。可以使用VHDL建模</li>
+<li>合成器：将VHDL具象化作最终的实际电路</li>
+<li>最终通过合成器得到的电路结果整合成目标设备</li>
+</ul>
+<p>而我们这里重点是学习：如何准确恰当地对数字电路系统建模</p>
+<h1>VHDL的 Gorden Rule</h1>
+<ol>
+<li>时刻记住VHDL是一种硬件设计语言
+<ul>
+<li>当我们使用VHDL时，我们不是在编程，而是在设计硬件</li>
+</ul>
+</li>
+<li>熟悉基本的数字电路系统的结构，例如逻辑门等</li>
+</ol>
 
                 
               </div>
