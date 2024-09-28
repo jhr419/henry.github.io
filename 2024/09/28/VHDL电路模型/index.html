@@ -26,10 +26,10 @@
 <meta property="og:description" content="学习VHDL的目的  学习VHDL用于对数字电路和系统进行建模  VHDL对电路描述是十分明确的，可以用来精确描述硬件系统的构成 VHDL语言提供了任何用来描述数字电路的方式   VHDL可以对数字电路模型和系统进行仿真  一些电路模型可以通过VHDL进行仿真和测试     也许你会认为使用图像对数字电路进行描述更为方便，但随着电路模块与电线增多，图像将会变得十分复杂 更为明智的方式，是通过VHD">
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="https://github.com/jhr419/henry.github.io/blob/master/img/VHDL%E7%94%B5%E8%B7%AF%E6%A8%A1%E5%9E%8B/img.png?raw=true">
-<meta property="og:image" content="https://jhr419.github.io/henry.github.io/henry.github.io/2024/09/28/public/img/VHDL%E7%94%B5%E8%B7%AF%E6%A8%A1%E5%9E%8B/img_1.png">
 <meta property="og:image" content="https://github.com/jhr419/henry.github.io/blob/master/img/VHDL%E7%94%B5%E8%B7%AF%E6%A8%A1%E5%9E%8B/img_1.png?raw=true">
+<meta property="og:image" content="https://github.com/jhr419/henry.github.io/blob/master/img/VHDL%E7%94%B5%E8%B7%AF%E6%A8%A1%E5%9E%8B/img_2.png?raw=true">
 <meta property="article:published_time" content="2024-09-28T03:18:50.000Z">
-<meta property="article:modified_time" content="2024-09-28T03:51:07.114Z">
+<meta property="article:modified_time" content="2024-09-28T13:13:50.110Z">
 <meta property="article:author" content="Henry Jin">
 <meta property="article:tag" content="笔记">
 <meta property="article:tag" content="数字电路">
@@ -268,7 +268,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          364 字
+          1k 字
         
       </span>
     
@@ -279,7 +279,7 @@
         
         
         
-          4 分钟
+          9 分钟
         
       </span>
     
@@ -342,7 +342,7 @@
               <p id="updated-time" class="note note-info" style="display: none">
                 
                   
-                    本文最后更新于 2024-09-28T11:51:07+08:00
+                    本文最后更新于 2024-09-28T21:13:50+08:00
                   
                   
 
@@ -370,8 +370,7 @@
 <p>也许你会认为使用图像对数字电路进行描述更为方便，但随着电路模块与电线增多，图像将会变得十分复杂</p>
 <p>更为明智的方式，是通过VHDL语言对电路进行描述（建模model it），然后将具体连接细节留给合成工具（合成器synthesiser）</p>
 <h2 id="数字系统设计流程">数字系统设计流程</h2>
-<p><img src="/henry.github.io/henry.github.io/2024/09/28/VHDL%E7%94%B5%E8%B7%AF%E6%A8%A1%E5%9E%8B/../public/img/VHDL%E7%94%B5%E8%B7%AF%E6%A8%A1%E5%9E%8B/img_1.png" srcset="/henry.github.io/img/loading.gif" lazyload alt><br>
-<img src="https://github.com/jhr419/henry.github.io/blob/master/img/VHDL%E7%94%B5%E8%B7%AF%E6%A8%A1%E5%9E%8B/img_1.png?raw=true" srcset="/henry.github.io/img/loading.gif" lazyload alt="数字系统设计流程"></p>
+<p><img src="https://github.com/jhr419/henry.github.io/blob/master/img/VHDL%E7%94%B5%E8%B7%AF%E6%A8%A1%E5%9E%8B/img_1.png?raw=true" srcset="/henry.github.io/img/loading.gif" lazyload alt="数字系统设计流程"></p>
 <ul>
 <li>电路系统设计者应该重点关心：最终的逻辑电路应该做什么，即：通过对数字系统的抽象化，提炼功能与接口。可以使用VHDL建模</li>
 <li>合成器：将VHDL具象化作最终的实际电路</li>
@@ -387,6 +386,72 @@
 </li>
 <li>熟悉基本的数字电路系统的结构，例如逻辑门等</li>
 </ol>
+<h1>Component 组件</h1>
+<p>试着描述这个电路系统</p>
+<p><img src="https://github.com/jhr419/henry.github.io/blob/master/img/VHDL%E7%94%B5%E8%B7%AF%E6%A8%A1%E5%9E%8B/img_2.png?raw=true" srcset="/henry.github.io/img/loading.gif" lazyload alt></p>
+<p>现在我们试着使用component进行描述</p>
+<p>我们按步骤设计：</p>
+<ol>
+<li>设计顶层实体，即对整体系统的输入输出进行描述</li>
+<li>声明底层模块单元</li>
+<li>声明中间信号</li>
+<li>创建companies和map实例</li>
+</ol>
+<figure class="highlight vhdl"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><code class="hljs VHDL"><span class="hljs-keyword">library</span> IEEE;<br><span class="hljs-keyword">use</span> IEEE.std_logic_1164.<span class="hljs-keyword">all</span>;<br><br><span class="hljs-comment">--entity--</span><br><span class="hljs-comment">--1.设计顶层实体，即对整体系统的输入输出进行描述--</span><br><span class="hljs-keyword">entity</span> my_compare <span class="hljs-keyword">is</span><br><span class="hljs-keyword">port</span>(A_IN   : <span class="hljs-keyword">in</span>  <span class="hljs-built_in">std_logic_vector</span>(<span class="hljs-number">2</span> <span class="hljs-keyword">downto</span> <span class="hljs-number">0</span>);<br>     B_IN   : <span class="hljs-keyword">in</span>  <span class="hljs-built_in">std_logic_vector</span>(<span class="hljs-number">2</span> <span class="hljs-keyword">downto</span> <span class="hljs-number">0</span>);<br>     EQ_OUT : <span class="hljs-keyword">out</span> <span class="hljs-built_in">std_logic</span>);<br><span class="hljs-keyword">end</span> my_compare;<br><br><span class="hljs-comment">--architecture--</span><br><span class="hljs-keyword">architecture</span> structural <span class="hljs-keyword">of</span> my_compare <span class="hljs-keyword">is</span><br><span class="hljs-comment">--2. 声明底层模块单元 component --</span><br>   <span class="hljs-keyword">component</span> big_xnor <span class="hljs-keyword">is</span><br>   <span class="hljs-keyword">port</span>(A, B : <span class="hljs-keyword">in</span>  <span class="hljs-built_in">std_logic</span>;<br>        F    : <span class="hljs-keyword">out</span> <span class="hljs-built_in">std_logic</span>);<br>   <span class="hljs-keyword">end</span> <span class="hljs-keyword">component</span>;<br>   <br>   <span class="hljs-keyword">component</span> big_and3 <span class="hljs-keyword">is</span><br>   <span class="hljs-keyword">port</span>(A, B, C : <span class="hljs-keyword">in</span>  <span class="hljs-built_in">std_logic</span>;<br>        F       : <span class="hljs-keyword">out</span> <span class="hljs-built_in">std_logic</span>);<br>   <span class="hljs-keyword">end</span> <span class="hljs-keyword">component</span>;<br>   <br>   <span class="hljs-comment">-- 3.声明中间信号 --</span><br>   <span class="hljs-comment">-- internal signal declarations</span><br>   <span class="hljs-keyword">signal</span> p1_out, p2_out, p3_out: <span class="hljs-built_in">std_logic</span>;<br><span class="hljs-keyword">begin</span><br>   x1: big_xnor <span class="hljs-keyword">port</span> <span class="hljs-keyword">map</span>(A =&gt; A_IN(<span class="hljs-number">2</span>), B =&gt; B_IN(<span class="hljs-number">2</span>), F =&gt; p1_out);<br>   x2: big_xnor <span class="hljs-keyword">port</span> <span class="hljs-keyword">map</span>(A =&gt; A_IN(<span class="hljs-number">1</span>), B =&gt; B_IN(<span class="hljs-number">1</span>), F =&gt; p2_out);<br>   x3: big_xnor <span class="hljs-keyword">port</span> <span class="hljs-keyword">map</span>(A =&gt; A_IN(<span class="hljs-number">0</span>), B =&gt; B_IN(<span class="hljs-number">0</span>), F =&gt; p3_out);<br>   a1: big_and3 <span class="hljs-keyword">port</span> <span class="hljs-keyword">map</span>(A =&gt; p1_out, B =&gt; p2_out,<br>                         C =&gt; p3_out, F =&gt; EQ_OUT);<br><span class="hljs-keyword">end</span> structural;<br></code></pre></td></tr></table></figure>
+<ul>
+<li>注意：</li>
+</ul>
+<ol>
+<li>对于每个component，其输入输出的名称只是形参</li>
+<li>变量名称应该能够体现模型电路元件之间的连接、映射关系，这样有利于理解电路描述</li>
+<li>component通过mapping将信号输入输出</li>
+</ol>
+<h2 id="Mapping">Mapping</h2>
+<p>映射指的是：将前部模块的输出信号作为输入信号连接到底层模块</p>
+<h3 id="显式映射和隐式映射">显式映射和隐式映射</h3>
+<p><strong>显式映射</strong></p>
+<ul>
+<li>底层接口中的每个信号都被列出，并且与高层信号通过 &quot; &lt;= &quot; 操作符进行连接
+<ul>
+<li>优点：明确、完整的描述电路系统</li>
+<li>缺点：这样会增添代码量</li>
+</ul>
+</li>
+</ul>
+<p><strong>隐式映射</strong></p>
+<ul>
+<li>类似于C语言中调用函数时，需要你写入参数</li>
+<li>通常在高级设计中出现</li>
+<li>映射遵循entity输入输出的顺序
+<ul>
+<li>优点：占用代码空间较少</li>
+<li>缺点：需要将信号按正确顺序放置（个人感觉不算什么缺点）</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight vhdl"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs VHDL"><span class="hljs-comment">-- implicit mapping (A =&gt;, B =&gt;, F =&gt;)</span><br>x3: big_xnor <span class="hljs-keyword">port</span> <span class="hljs-keyword">map</span>(A_IN(<span class="hljs-number">0</span>), B_IN(<span class="hljs-number">0</span>), p1_out);<br></code></pre></td></tr></table></figure>
+<h1>总结</h1>
+<ul>
+<li>VHDL是一种用于描述硬件-数字电路和系统的特定语言
+<ul>
+<li>尽管语法相似，但与 像C或Java这样的编程语言非常不同</li>
+</ul>
+</li>
+<li>VHDL必须被合成并实现适当的设备来创建实际的系统</li>
+<li>VHDL遵循黑盒设计，将一个module分为：
+<ul>
+<li>entity 实体:输入/输出接口</li>
+<li>architecture 架构:内部工作/结构</li>
+</ul>
+</li>
+<li>IEEE定义了逻辑设计的通用库，数字信号的基本类型是：std_logic</li>
+<li>总线信号用 std_logic_vector表示</li>
+<li>VHDL对大小写和空格不敏感，并且对括号不敏感</li>
+<li>结构建模支持分层和模块化设计</li>
+<li>设计人员可以使用库中的开发与测试完善的blocks来构建一个可靠的系统</li>
+<li>组件是结构建模的核心，步骤包括:声明、实例化和映射。</li>
+<li>映射包括显式映射和隐式映射</li>
+</ul>
 
                 
               </div>
