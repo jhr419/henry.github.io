@@ -25,17 +25,17 @@
 <meta property="og:site_name" content="Henry&#39;s Blog">
 <meta property="og:description" content="关于VHDL  V &#x3D; Very High-Speed Integrated Circuit (VHSIC) HDL &#x3D; Hardware Descriptive Language VHDL是一种计算机语言，具有相应的语法和使用规则 VHDL主要用于描述硬件 相比于其它计算机语言，VHDL并不是顺序运行的 VHDL是一种并行语言，因为他是用于描述并行执行的硬件的语言 不要用C语言一类的顺序执行的编">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="https://github.com/jhr419/henry.github.io/blob/master/img/PostImg/VHDL%E5%9F%BA%E7%A1%80%E5%AD%A6%E4%B9%A0/LogicOperator.png?raw=true">
-<meta property="og:image" content="https://github.com/jhr419/henry.github.io/blob/master/img/PostImg/VHDL%E5%9F%BA%E7%A1%80%E5%AD%A6%E4%B9%A0/killer_ckt.png">
-<meta property="og:image" content="https://github.com/jhr419/henry.github.io/blob/master/img/PostImg/VHDL%E5%9F%BA%E7%A1%80%E5%AD%A6%E4%B9%A0/img.png">
-<meta property="og:image" content="https://github.com/jhr419/henry.github.io/blob/master/img/PostImg/VHDL%E5%9F%BA%E7%A1%80%E5%AD%A6%E4%B9%A0/img_1.png">
+<meta property="og:image" content="https://github.com/jhr419/henry.github.io/blob/master/img/VHDL%E5%9F%BA%E7%A1%80%E5%AD%A6%E4%B9%A0/LogicOperator.png?raw=true">
+<meta property="og:image" content="https://github.com/jhr419/henry.github.io/blob/master/img/VHDL%E5%9F%BA%E7%A1%80%E5%AD%A6%E4%B9%A0/killer_ckt.png">
+<meta property="og:image" content="https://github.com/jhr419/henry.github.io/blob/master/img/VHDL%E5%9F%BA%E7%A1%80%E5%AD%A6%E4%B9%A0/img.png">
+<meta property="og:image" content="https://github.com/jhr419/henry.github.io/blob/master/img/VHDL%E5%9F%BA%E7%A1%80%E5%AD%A6%E4%B9%A0/img_1.png">
 <meta property="article:published_time" content="2024-09-27T06:18:31.000Z">
-<meta property="article:modified_time" content="2024-09-28T03:27:42.720Z">
+<meta property="article:modified_time" content="2024-09-28T03:33:20.813Z">
 <meta property="article:author" content="Henry Jin">
 <meta property="article:tag" content="笔记">
 <meta property="article:tag" content="数字电路">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:image" content="https://github.com/jhr419/henry.github.io/blob/master/img/PostImg/VHDL%E5%9F%BA%E7%A1%80%E5%AD%A6%E4%B9%A0/LogicOperator.png?raw=true">
+<meta name="twitter:image" content="https://github.com/jhr419/henry.github.io/blob/master/img/VHDL%E5%9F%BA%E7%A1%80%E5%AD%A6%E4%B9%A0/LogicOperator.png?raw=true">
   
   
     <meta name="referrer" content="no-referrer-when-downgrade">
@@ -343,7 +343,7 @@
               <p id="updated-time" class="note note-info" style="display: none">
                 
                   
-                    本文最后更新于 2024-09-28T11:27:42+08:00
+                    本文最后更新于 2024-09-28T11:33:20+08:00
                   
                   
 
@@ -430,7 +430,7 @@
 <li>…</li>
 </ul>
 <h3 id="逻辑运算符保留字符">逻辑运算符保留字符</h3>
-<p><img src="https://github.com/jhr419/henry.github.io/blob/master/img/PostImg/VHDL%E5%9F%BA%E7%A1%80%E5%AD%A6%E4%B9%A0/LogicOperator.png?raw=true" srcset="/henry.github.io/img/loading.gif" lazyload alt="LogicOperator"></p>
+<p><img src="https://github.com/jhr419/henry.github.io/blob/master/img/VHDL%E5%9F%BA%E7%A1%80%E5%AD%A6%E4%B9%A0/LogicOperator.png?raw=true" srcset="/henry.github.io/img/loading.gif" lazyload alt="LogicOperator"></p>
 <h2 id="Entity">Entity</h2>
 <ul>
 <li>entity声明描述了电路的接口或外部表示</li>
@@ -443,7 +443,7 @@
 <li>示例</li>
 </ul>
 <figure class="highlight vhdl"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs VHDL"><span class="hljs-comment">-- interface description of killer_ckt</span><br><span class="hljs-keyword">entity</span> killer_ckt <span class="hljs-keyword">is</span><br><span class="hljs-keyword">port</span>( life_in1      : <span class="hljs-keyword">in</span>  <span class="hljs-built_in">std_logic</span>;<br>      life_in2      : <span class="hljs-keyword">in</span>  <span class="hljs-built_in">std_logic</span>;<br>      ctrl_a, ctrl_b: <span class="hljs-keyword">in</span>  <span class="hljs-built_in">std_logic</span>;<br>      kill_a        : <span class="hljs-keyword">out</span> <span class="hljs-built_in">std_logic</span>;<br>      kill_b, kill_c: <span class="hljs-keyword">out</span> <span class="hljs-built_in">std_logic</span>);<br><span class="hljs-keyword">end</span> killer_ckt;<br></code></pre></td></tr></table></figure>
-<p><img src="https://github.com/jhr419/henry.github.io/blob/master/img/PostImg/VHDL%E5%9F%BA%E7%A1%80%E5%AD%A6%E4%B9%A0/killer_ckt.png" srcset="/henry.github.io/img/loading.gif" lazyload alt></p>
+<p><img src="https://github.com/jhr419/henry.github.io/blob/master/img/VHDL%E5%9F%BA%E7%A1%80%E5%AD%A6%E4%B9%A0/killer_ckt.png" srcset="/henry.github.io/img/loading.gif" lazyload alt></p>
 <ul>
 <li>需要写明entity名称，port端口，每个port名称以及数据类型</li>
 <li>port可以并排声明，用逗号隔开</li>
@@ -483,7 +483,7 @@
 </ul>
 </li>
 <li>练习<br>
-<img src="https://github.com/jhr419/henry.github.io/blob/master/img/PostImg/VHDL%E5%9F%BA%E7%A1%80%E5%AD%A6%E4%B9%A0/img.png" srcset="/henry.github.io/img/loading.gif" lazyload alt></li>
+<img src="https://github.com/jhr419/henry.github.io/blob/master/img/VHDL%E5%9F%BA%E7%A1%80%E5%AD%A6%E4%B9%A0/img.png" srcset="/henry.github.io/img/loading.gif" lazyload alt></li>
 </ul>
 <figure class="highlight vhdl"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs VHDL"><span class="hljs-keyword">entity</span> alu4 <span class="hljs-keyword">is</span><br><span class="hljs-keyword">port</span>( A, B  : <span class="hljs-keyword">in</span>  <span class="hljs-built_in">std_logic_vector</span>(<span class="hljs-number">3</span> <span class="hljs-keyword">downto</span> <span class="hljs-number">0</span>);<br>      F     : <span class="hljs-keyword">in</span>  <span class="hljs-built_in">std_logic_vector</span>(<span class="hljs-number">2</span> <span class="hljs-keyword">downto</span> <span class="hljs-number">0</span>);<br>      CIN   : <span class="hljs-keyword">in</span>  <span class="hljs-built_in">std_logic</span>;<br>      <br>      OUTPUT: <span class="hljs-keyword">out</span> <span class="hljs-built_in">std_logic_vector</span>(<span class="hljs-number">3</span> <span class="hljs-keyword">downto</span> <span class="hljs-number">0</span>);<br>      COUT  : <span class="hljs-keyword">out</span> <span class="hljs-built_in">std_logic</span>);<br><span class="hljs-keyword">end</span> alu4;<br></code></pre></td></tr></table></figure>
 <h2 id="Architecture">Architecture</h2>
@@ -540,7 +540,7 @@
 <figure class="highlight vhdl"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><code class="hljs VHDL"><span class="hljs-comment">--- file: nor2.vhd ---</span><br><span class="hljs-keyword">library</span> IEEE;<br><span class="hljs-keyword">use</span> IEEE.std_logic_1164.<span class="hljs-keyword">all</span>;<br><span class="hljs-keyword">entity</span> nor2 <span class="hljs-keyword">is</span><br><span class="hljs-keyword">port</span>( A, B: <span class="hljs-keyword">in</span>  <span class="hljs-built_in">std_logic</span>;<br>      F   : <span class="hljs-keyword">out</span> <span class="hljs-built_in">std_logic</span>);<br><span class="hljs-keyword">end</span>;<br><span class="hljs-comment">-- the gate level architecture for nor2</span><br><span class="hljs-keyword">architecture</span> myarch <span class="hljs-keyword">of</span> nor2<br><span class="hljs-keyword">begin</span><br>  F &lt;= <span class="hljs-keyword">not</span>(A <span class="hljs-keyword">or</span> B);<br><span class="hljs-keyword">end</span> myarch;<br></code></pre></td></tr></table></figure>
 <ol start="2">
 <li>3-input NAND Gate<br>
-<img src="https://github.com/jhr419/henry.github.io/blob/master/img/PostImg/VHDL%E5%9F%BA%E7%A1%80%E5%AD%A6%E4%B9%A0/img_1.png" srcset="/henry.github.io/img/loading.gif" lazyload alt></li>
+<img src="https://github.com/jhr419/henry.github.io/blob/master/img/VHDL%E5%9F%BA%E7%A1%80%E5%AD%A6%E4%B9%A0/img_1.png" srcset="/henry.github.io/img/loading.gif" lazyload alt></li>
 </ol>
 <figure class="highlight vhdl"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><code class="hljs VHDL"><span class="hljs-keyword">library</span> IEEE<br><span class="hljs-keyword">use</span> IEEE.std_logic_1164.<span class="hljs-keyword">all</span>;<br><span class="hljs-comment">-- three-input NAND</span><br><span class="hljs-keyword">entity</span> my_nand3 <span class="hljs-keyword">is</span><br><span class="hljs-keyword">port</span>( A, B, C: <span class="hljs-keyword">in</span>  <span class="hljs-built_in">std_logic</span>;<br>      F      : <span class="hljs-keyword">out</span> <span class="hljs-built_in">std_logic</span>);<br><span class="hljs-keyword">end</span> my_nand3;<br><br>architechture my_nand3_arch <span class="hljs-keyword">of</span> my_nand3 <span class="hljs-keyword">is</span><br>  <span class="hljs-keyword">signal</span> D: <span class="hljs-built_in">std_logic</span>;<br><span class="hljs-keyword">begin</span><br>  D &lt;= A <span class="hljs-keyword">and</span> B <span class="hljs-keyword">and</span> C;<br><span class="hljs-keyword">end</span> my_nand3_arch;<br></code></pre></td></tr></table></figure>
                 
