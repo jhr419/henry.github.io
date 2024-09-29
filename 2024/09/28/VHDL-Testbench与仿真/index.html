@@ -1,0 +1,1004 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/henry.github.io/img/Icon.png">
+  <link rel="icon" href="/henry.github.io/img/Icon.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+    <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="Henry Jin">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="前言  前面两篇文章我们已经介绍了VHDL的基本语法和基本模块的编写要点 但是光有模块和构建好的architecture还不行，我们还需要对电路提供信号激励，也就是数字电路系统的输入，这样才能使得电路系统真正工作起来。 本篇文章开始介绍如何编写系统激励，并且讲述如何使用VHDL仿真  前面两篇文章连接：  VHDL基础学习：  https:&#x2F;&#x2F;jhr419.github.io&#x2F;henry.gith">
+<meta property="og:type" content="article">
+<meta property="og:title" content="VHDL（三）Testbench与仿真">
+<meta property="og:url" content="https://jhr419.github.io/henry.github.io/2024/09/28/VHDL-Testbench%E4%B8%8E%E4%BB%BF%E7%9C%9F/">
+<meta property="og:site_name" content="Henry&#39;s Blog">
+<meta property="og:description" content="前言  前面两篇文章我们已经介绍了VHDL的基本语法和基本模块的编写要点 但是光有模块和构建好的architecture还不行，我们还需要对电路提供信号激励，也就是数字电路系统的输入，这样才能使得电路系统真正工作起来。 本篇文章开始介绍如何编写系统激励，并且讲述如何使用VHDL仿真  前面两篇文章连接：  VHDL基础学习：  https:&#x2F;&#x2F;jhr419.github.io&#x2F;henry.gith">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://github.com/jhr419/henry.github.io/blob/master/img/VHDL-Testbench%E4%B8%8E%E4%BB%BF%E7%9C%9F/img.png?raw=true">
+<meta property="og:image" content="https://github.com/jhr419/henry.github.io/blob/master/img/VHDL-Testbench%E4%B8%8E%E4%BB%BF%E7%9C%9F/img_1.png?raw=true">
+<meta property="og:image" content="https://github.com/jhr419/henry.github.io/blob/master/img/VHDL-Testbench%E4%B8%8E%E4%BB%BF%E7%9C%9F/img_2.png?raw=true">
+<meta property="article:published_time" content="2024-09-28T13:36:05.000Z">
+<meta property="article:modified_time" content="2024-09-29T17:41:42.668Z">
+<meta property="article:author" content="Henry Jin">
+<meta property="article:tag" content="笔记">
+<meta property="article:tag" content="数字电路">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://github.com/jhr419/henry.github.io/blob/master/img/VHDL-Testbench%E4%B8%8E%E4%BB%BF%E7%9C%9F/img.png?raw=true">
+  
+  
+    <meta name="referrer" content="no-referrer-when-downgrade">
+  
+  
+  <title>VHDL（三）Testbench与仿真 - Henry&#39;s Blog</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/henry.github.io/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/henry.github.io/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/henry.github.io/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"jhr419.github.io","root":"/henry.github.io/","version":"1.9.7","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"left","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":true,"follow_dnt":false,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/henry.github.io/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/henry.github.io/js/utils.js" ></script>
+  <script  src="/henry.github.io/js/color-schema.js" ></script>
+  
+
+  
+
+  
+    <!-- Google tag (gtag.js) -->
+    <script async>
+      if (!Fluid.ctx.dnt) {
+        Fluid.utils.createScript("https://www.googletagmanager.com/gtag/js?id=", function() {
+          window.dataLayer = window.dataLayer || [];
+          function gtag() {
+            dataLayer.push(arguments);
+          }
+          gtag('js', new Date());
+          gtag('config', '');
+        });
+      }
+    </script>
+  
+
+  
+
+  
+
+  
+
+  
+
+
+
+  
+<meta name="generator" content="Hexo 7.2.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/henry.github.io/">
+      <strong>Henry&#39;s Blog</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/henry.github.io/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/henry.github.io/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/henry.github.io/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/henry.github.io/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/henry.github.io/about/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/henry.github.io/links/" target="_self">
+                <i class="iconfont icon-link-fill"></i>
+                <span>友链</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/henry.github.io/img/background.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="VHDL（三）Testbench与仿真"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2024-09-28 21:36" pubdate>
+          2024年9月28日 晚上
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          2.3k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          20 分钟
+        
+      </span>
+    
+
+    
+    
+      
+        <span id="busuanzi_container_page_pv" style="display: none">
+          <i class="iconfont icon-eye" aria-hidden="true"></i>
+          <span id="busuanzi_value_page_pv"></span> 次
+        </span>
+        
+      
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="padding-left: 2rem; margin-right: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">VHDL（三）Testbench与仿真</h1>
+            
+              <p id="updated-time" class="note note-info" style="display: none">
+                
+                  
+                    本文最后更新于 2024-09-30T01:41:42+08:00
+                  
+                  
+
+                
+              </p>
+            
+            
+              <div class="markdown-body">
+                
+                <h1>前言</h1>
+<ul>
+<li>前面两篇文章我们已经介绍了VHDL的基本语法和基本模块的编写要点</li>
+<li>但是光有模块和构建好的architecture还不行，我们还需要对电路提供信号激励，也就是数字电路系统的输入，这样才能使得电路系统真正工作起来。</li>
+<li>本篇文章开始介绍如何编写系统激励，并且讲述如何使用VHDL仿真</li>
+</ul>
+<p>前面两篇文章连接：</p>
+<ol>
+<li>VHDL基础学习：</li>
+</ol>
+<p><a href="https://jhr419.github.io/henry.github.io/2024/09/27/VHDL%E5%9F%BA%E7%A1%80%E5%AD%A6%E4%B9%A0/">https://jhr419.github.io/henry.github.io/2024/09/27/VHDL基础学习/</a></p>
+<ol start="2">
+<li>VHDL电路模型：</li>
+</ol>
+<p><a href="https://jhr419.github.io/henry.github.io/2024/09/28/VHDL%E7%94%B5%E8%B7%AF%E6%A8%A1%E5%9E%8B/">https://jhr419.github.io/henry.github.io/2024/09/28/VHDL电路模型/</a></p>
+<h1>VHDL中的标准模型</h1>
+<ul>
+<li>目前，我们已经学习了三种类型的信号赋值：并发，条件(when-else)，选择(with-select)</li>
+<li>接下来我们将看到另一种并发语句，时序语句sequential statement</li>
+<li>描述VHDl的architecture有很多种标准模型和方式
+<ul>
+<li>data-flow style, structural style, behavioral style</li>
+</ul>
+</li>
+</ul>
+<p>关于三种类型的详解可见：<br>
+<a target="_blank" rel="noopener" href="https://buzztech.in/vhdl-modelling-styles-behavioral-dataflow-structural/">https://buzztech.in/vhdl-modelling-styles-behavioral-dataflow-structural/</a></p>
+<h2 id="Data-Flow-Style-结构">Data-Flow Style 结构</h2>
+<ul>
+<li>数据流风格：通过显示系统各种内置组件之间的输入输出来描述电路</li>
+<li>组件包括：常用逻辑运算操作符，复用器，解码器等</li>
+</ul>
+<p>在之前我们写过的例子中你可以看到数据流风格是如何工作的<br>
+<img src="https://github.com/jhr419/henry.github.io/blob/master/img/VHDL-Testbench%E4%B8%8E%E4%BB%BF%E7%9C%9F/img.png?raw=true" srcset="/henry.github.io/img/loading.gif" lazyload alt></p>
+<h2 id="Behavioral-Style-结构">Behavioral Style 结构</h2>
+<ul>
+<li>随着电路变得复杂起来，最好还是选择行为风格</li>
+<li>behavioral style会简化实际硬件实现设计，重点关注电路如何对输入做出反应产生输出</li>
+<li>可以将更多的细节实现留给合成器</li>
+</ul>
+<h2 id="Process-Statement-过程语句">Process Statement 过程语句</h2>
+<ul>
+<li>行为风格的核心是process statement</li>
+<li>由一个或多个过程语句组成，每个语句是一个独立的并发语句，它本身包含一个或多个顺序语句</li>
+<li>顺序语句由仿真器按顺序执行，这与传统编程语言中的顺序语句执行相同</li>
+</ul>
+<figure class="highlight vhdl"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs VHDL">my_label: <span class="hljs-keyword">process</span>(sensitivity_list) <span class="hljs-keyword">is</span><br>    &lt;item declaration&gt;<br><span class="hljs-keyword">begin</span><br>    &lt;sequential_statements&gt;<br><span class="hljs-keyword">end</span> <span class="hljs-keyword">process</span> my_label;<br></code></pre></td></tr></table></figure>
+<p>与数据流风格对比：</p>
+<figure class="highlight vhdl"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs VHDL"><span class="hljs-keyword">entity</span> my_xor <span class="hljs-keyword">is</span><br><span class="hljs-keyword">port</span> ( A, B : <span class="hljs-keyword">in</span> <span class="hljs-built_in">std_logic</span>;<br>       F    : <span class="hljs-keyword">out</span> <span class="hljs-built_in">std_logic</span>);<br><span class="hljs-keyword">end</span> my_xor;<br><span class="hljs-keyword">architecture</span> dataflow <span class="hljs-keyword">of</span> my_xor <span class="hljs-keyword">is</span><br><span class="hljs-keyword">begin</span><br>  F &lt;= A <span class="hljs-keyword">xor</span> B;<br><span class="hljs-keyword">end</span> dataflow;<br></code></pre></td></tr></table></figure>
+<figure class="highlight vhdl"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs VHDL"><span class="hljs-keyword">architecture</span> behav <span class="hljs-keyword">of</span> my_xor <span class="hljs-keyword">is</span><br><span class="hljs-keyword">begin</span><br>  xor_proc: <span class="hljs-keyword">process</span> (A, B)<br>  <span class="hljs-keyword">begin</span><br>    F &lt;= A <span class="hljs-keyword">xor</span> B;<br>  <span class="hljs-keyword">end</span> <span class="hljs-keyword">process</span> xor_proc;<br><span class="hljs-keyword">end</span> behav;<br></code></pre></td></tr></table></figure>
+<ul>
+<li>
+<p>这里的<strong>xor_proc</strong>是process的实例化</p>
+</li>
+<li>
+<p>区别：</p>
+<ul>
+<li>数据流风格代码直接通过并行信号赋值来描述逻辑。<br>
+Sum &lt;= A xor B; 和 Carry &lt;= A and B;<br>
+是独立的并行操作。</li>
+<li>过程风格代码在 process 块中使用。<br>
+这里的操作是顺序的，但在 process 中由敏感列表 (A, B) 控制，只要 A 或 B 发生变化，进程就会执行。</li>
+</ul>
+</li>
+</ul>
+<h3 id="D触发器">D触发器</h3>
+<ul>
+<li>用D触发器的例子来介绍两种风格的显著区别</li>
+</ul>
+<p>D触发器是一种典型的时序逻辑电路，它在时钟信号的上升沿时存储输入信号</p>
+<ul>
+<li>数据流风格：无法直接实现时序逻辑，因为它不能处理时钟触发</li>
+<li>过程风格：可以使用时钟事件来控制信号存储的时序逻辑</li>
+</ul>
+<ol>
+<li>数据流风格<br>
+数据流风格是用于描述组合逻辑的，它无法实现需要时钟触发的电路，比如 D 触发器。我们无法用数据流风格直接描述 D 触发器的行为，因为它缺少对时钟沿（如上升沿）的控制。</li>
+</ol>
+<p>数据流风格更适合描述逻辑运算，而不是时钟控制的电路。你可能会尝试像下面这样写，但它是错误的，因为无法通过组合逻辑实现时序行为：</p>
+<figure class="highlight vhdl"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs VHDL"><span class="hljs-comment">-- 无法用数据流风格实现 D 触发器</span><br><span class="hljs-keyword">architecture</span> dataflow <span class="hljs-keyword">of</span> d_flip_flop <span class="hljs-keyword">is</span><br><span class="hljs-keyword">begin</span><br>    <span class="hljs-comment">-- 错误示例：没有时钟沿控制</span><br>    Q &lt;= D; <span class="hljs-comment">-- 无法触发时序逻辑，只会产生组合逻辑</span><br><span class="hljs-keyword">end</span> dataflow;<br></code></pre></td></tr></table></figure>
+<ol start="2">
+<li>过程风格（适合时序逻辑）</li>
+</ol>
+<p>过程风格可以使用时钟的上升沿来触发信号的变化，这就是时序电路的典型应用。</p>
+<p>下面是一个用 过程风格 编写的 D 触发器代码：</p>
+<figure class="highlight vhdl"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><code class="hljs VHDL"><span class="hljs-keyword">library</span> IEEE;<br><span class="hljs-keyword">use</span> IEEE.STD_LOGIC_1164.<span class="hljs-keyword">ALL</span>;<br><br><span class="hljs-comment">-- 实体定义</span><br><span class="hljs-keyword">entity</span> d_flip_flop <span class="hljs-keyword">is</span><br>    <span class="hljs-keyword">Port</span> ( clk : <span class="hljs-keyword">in</span>  <span class="hljs-built_in">STD_LOGIC</span>;<br>           D : <span class="hljs-keyword">in</span>  <span class="hljs-built_in">STD_LOGIC</span>;<br>           Q : <span class="hljs-keyword">out</span>  <span class="hljs-built_in">STD_LOGIC</span>);<br><span class="hljs-keyword">end</span> d_flip_flop;<br><br><span class="hljs-comment">-- 过程风格描述 D 触发器</span><br><span class="hljs-keyword">architecture</span> behavioral <span class="hljs-keyword">of</span> d_flip_flop <span class="hljs-keyword">is</span><br><span class="hljs-keyword">begin</span><br>    <span class="hljs-comment">-- 进程块，响应时钟上升沿</span><br>    <span class="hljs-keyword">process</span>(clk)<br>    <span class="hljs-keyword">begin</span><br>        <span class="hljs-keyword">if</span> rising_edge(clk) <span class="hljs-keyword">then</span><br>            Q &lt;= D; <span class="hljs-comment">-- 在时钟上升沿时，输出 Q 取值为输入 D</span><br>        <span class="hljs-keyword">end</span> <span class="hljs-keyword">if</span>;<br>    <span class="hljs-keyword">end</span> <span class="hljs-keyword">process</span>;<br><span class="hljs-keyword">end</span> behavioral;<br></code></pre></td></tr></table></figure>
+<p>主要区别：</p>
+<ul>
+<li>
+<p>数据流风格：它只能描述组合逻辑，无法处理时钟事件。因此无法用它实现像 D 触发器这样的时序电路。</p>
+</li>
+<li>
+<p>过程风格：可以处理时钟信号，通过 rising_edge(clk) 检测时钟的上升沿，用于描述寄存器、触发器等时序逻辑。</p>
+</li>
+</ul>
+<p>使用区别：</p>
+<ul>
+<li>
+<p>时钟信号处理：数据流风格只能描述组合逻辑，而过程风格可以处理时钟沿检测，这是它们最显著的区别。时序逻辑依赖于过程风格来触发信号的变化。</p>
+</li>
+<li>
+<p>组合 vs 时序：数据流风格仅适用于组合逻辑，所有信号赋值是同步的，而过程风格可以引入时钟和控制逻辑，实现同步的时序行为。</p>
+</li>
+</ul>
+<p>在哪些地方你可以用到时序语句</p>
+<ul>
+<li>信号赋值语句</li>
+<li>if语句</li>
+<li>case语句</li>
+</ul>
+<h3 id="if语句">if语句</h3>
+<figure class="highlight vhdl"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs VHDL"><span class="hljs-keyword">if</span> (condition) <span class="hljs-keyword">then</span><br>  &lt;statements&gt;<br><span class="hljs-keyword">elsif</span> (condition) <span class="hljs-keyword">then</span><br>  &lt;statements&gt;<br><span class="hljs-keyword">else</span><br> &lt;statements&gt;<br> <span class="hljs-keyword">end</span> <span class="hljs-keyword">if</span>;<br></code></pre></td></tr></table></figure>
+<p>if语句类似条件信号赋值语句，但是更加灵活</p>
+<p>另外，最后的else是用于捕获所有剩余条件的</p>
+<p>举例：</p>
+<p>用if语句写出下面逻辑方程：</p>
+<p>$ F_{OUT}(A,B,C)=AB^{‘}C^{’}+BC $</p>
+<figure class="highlight vhdl"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><code class="hljs VHDL"><span class="hljs-keyword">architecture</span> example <span class="hljs-keyword">of</span> my_ex <span class="hljs-keyword">is</span><br><span class="hljs-keyword">begin</span><br>  procl: <span class="hljs-keyword">process</span> (A, B, C)<br>  <span class="hljs-keyword">begin</span><br>    <span class="hljs-keyword">if</span> (A = <span class="hljs-string">&#x27;1&#x27;</span> <span class="hljs-keyword">and</span> B = <span class="hljs-string">&#x27;0&#x27;</span> <span class="hljs-keyword">and</span> C = <span class="hljs-string">&#x27;0&#x27;</span>) <span class="hljs-keyword">then</span><br>      F_OUT &lt;= <span class="hljs-string">&#x27;1&#x27;</span>;<br>    <span class="hljs-keyword">elsif</span> (B = <span class="hljs-string">&#x27;1&#x27;</span> <span class="hljs-keyword">and</span> C = <span class="hljs-string">&#x27;1&#x27;</span>) <span class="hljs-keyword">then</span><br>      F_OUT &lt;= <span class="hljs-string">&#x27;1&#x27;</span>;<br>    <span class="hljs-keyword">else</span><br>      F_OUT &lt;= <span class="hljs-string">&#x27;0&#x27;</span>;<br>    <span class="hljs-keyword">end</span> <span class="hljs-keyword">if</span>;<br>  <span class="hljs-keyword">end</span> <span class="hljs-keyword">process</span> procl;<br><span class="hljs-keyword">end</span> example;<br></code></pre></td></tr></table></figure>
+<ul>
+<li>这个大的process块与其它块是并发执行的，但是process中的语句是顺序执行的</li>
+</ul>
+<p>尝试用<strong>过程风格</strong>与<strong>if</strong>语句对下面的复用器描述</p>
+<p><img src="https://github.com/jhr419/henry.github.io/blob/master/img/VHDL-Testbench%E4%B8%8E%E4%BB%BF%E7%9C%9F/img_1.png?raw=true" srcset="/henry.github.io/img/loading.gif" lazyload alt></p>
+<figure class="highlight vhdl"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><code class="hljs VHDL"><span class="hljs-keyword">entity</span> mux_8t1 <span class="hljs-keyword">is</span><br><span class="hljs-keyword">port</span> ( DIN: <span class="hljs-keyword">in</span>  <span class="hljs-built_in">std_logic_vector</span>(<span class="hljs-number">7</span> <span class="hljs-keyword">downto</span> <span class="hljs-number">0</span>);<br>       SEL: <span class="hljs-keyword">in</span>  <span class="hljs-built_in">std_logic_vector</span>(<span class="hljs-number">2</span> <span class="hljs-keyword">downto</span> <span class="hljs-number">0</span>);<br>       F  : <span class="hljs-keyword">out</span> <span class="hljs-built_in">std_logic</span>);<br><span class="hljs-keyword">end</span> mux_8t1;<br><br><span class="hljs-keyword">architecture</span> arch <span class="hljs-keyword">of</span> mux_8t1 <span class="hljs-keyword">is</span><br><span class="hljs-keyword">begin</span><br>  my_mux: <span class="hljs-keyword">process</span>(DIN, SEL)<br>  <span class="hljs-keyword">begin</span><br>    <span class="hljs-keyword">if</span>    (SEL = <span class="hljs-string">&quot;111&quot;</span>) <span class="hljs-keyword">then</span> F &lt;= DIN(<span class="hljs-number">7</span>);<br>    <span class="hljs-keyword">elsif</span> (SEL = <span class="hljs-string">&quot;110&quot;</span>) <span class="hljs-keyword">then</span> F &lt;= DIN(<span class="hljs-number">6</span>);<br>    ...<br>    <span class="hljs-keyword">elsif</span> (SEL = <span class="hljs-string">&quot;000&quot;</span>) <span class="hljs-keyword">then</span> F &lt;= DIN(<span class="hljs-number">0</span>);<br>    <span class="hljs-keyword">else</span>  F &lt;= <span class="hljs-string">&#x27;0&#x27;</span>;<br>    <span class="hljs-keyword">end</span> <span class="hljs-keyword">if</span>;<br>  <span class="hljs-keyword">end</span> <span class="hljs-keyword">process</span> my_mux;<br><span class="hljs-keyword">end</span> arch;<br></code></pre></td></tr></table></figure>
+<ul>
+<li>注意要考虑所有的可能</li>
+</ul>
+<h3 id="case语句">case语句</h3>
+<figure class="highlight vhdl"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs VHDL"><span class="hljs-keyword">case</span> (expression) <span class="hljs-keyword">is</span><br>  <span class="hljs-keyword">when</span> choices =&gt;<br>    &lt;statements&gt;<br>  <span class="hljs-keyword">when</span> choices =&gt;<br>    &lt;statements&gt;<br>  <span class="hljs-keyword">when</span> <span class="hljs-keyword">others</span> =&gt;<br>    &lt;statements&gt;<br><span class="hljs-keyword">end</span> <span class="hljs-keyword">case</span>;<br></code></pre></td></tr></table></figure>
+<p>顺序执行，但只取其中一个值，与C语言一样</p>
+<p>举例：</p>
+<p>$F_{OUT}(A,B,C) = $</p>
+<figure class="highlight vhdl"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><code class="hljs VHDL"><span class="hljs-keyword">architecture</span> case_ex <span class="hljs-keyword">of</span> my_ex <span class="hljs-keyword">is</span><br>  <span class="hljs-keyword">signal</span> INPUT: <span class="hljs-built_in">std_logic_vector</span>(<span class="hljs-number">2</span> <span class="hljs-keyword">downto</span> <span class="hljs-number">0</span>);<br><span class="hljs-keyword">begin</span><br>  INPUT &lt;= A &amp; B &amp; C;<br>  proc1: <span class="hljs-keyword">process</span> (INPUT)<br>  <span class="hljs-keyword">begin</span><br>    <span class="hljs-keyword">case</span> (INPUT) <span class="hljs-keyword">is</span><br>    <span class="hljs-keyword">when</span> <span class="hljs-string">&quot;100&quot;</span>  =&gt; F_OUT &lt;= <span class="hljs-string">&#x27;1&#x27;</span>;<br>    <span class="hljs-keyword">when</span> <span class="hljs-string">&quot;011&quot;</span>  =&gt; F_OUT &lt;= <span class="hljs-string">&#x27;1&#x27;</span>;<br>    <span class="hljs-keyword">when</span> <span class="hljs-string">&quot;111&quot;</span>  =&gt; F_OUT &lt;= <span class="hljs-string">&#x27;1&#x27;</span>;<br>    <span class="hljs-keyword">when</span> <span class="hljs-keyword">others</span> =&gt; F_OUT &lt;= <span class="hljs-string">&#x27;0&#x27;</span>;<br>    <span class="hljs-keyword">end</span> <span class="hljs-keyword">case</span>;<br>  <span class="hljs-keyword">end</span> <span class="hljs-keyword">process</span> proc1;<br><span class="hljs-keyword">end</span> case_ex;<br></code></pre></td></tr></table></figure>
+<h1>Simulation &amp; Test Benches</h1>
+<ul>
+<li>在我们前面学习完基础语句，模块编写后，我们需要在出实际电路之前，<br>
+需要证明电路模块的正确性，这时候就需要利用仿真环境，验证你的电路设计的功能和时序逻辑</li>
+<li>仿真工具通常需要 test bench file 来明确指出如何仿真被测元件</li>
+</ul>
+<h2 id="Test-Bench">Test Bench</h2>
+<p><img src="https://github.com/jhr419/henry.github.io/blob/master/img/VHDL-Testbench%E4%B8%8E%E4%BB%BF%E7%9C%9F/img_2.png?raw=true" srcset="/henry.github.io/img/loading.gif" lazyload alt></p>
+<ul>
+<li>一个test bench是一个虚拟的电路或者系统，用于创建顶层模块实例（Unit Under Test, UUT），并且为实例产生输入激励</li>
+<li>输出可以被记录与波形可视化，用来验证电路系统的正确性</li>
+<li>testbench本身并不涉及实体的实现与合成</li>
+</ul>
+<h2 id="Example">Example</h2>
+<figure class="highlight vhdl"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><code class="hljs VHDL"><span class="hljs-comment">--test bench 的命名，也是通过entity命名--</span><br><span class="hljs-keyword">entity</span> big_xnor_tb <span class="hljs-keyword">is</span><br><span class="hljs-keyword">end</span> big_xnor_tb;<br><span class="hljs-keyword">architecture</span> behavior <span class="hljs-keyword">of</span> big_xnor_tb <span class="hljs-keyword">is</span><br>  <span class="hljs-keyword">component</span> big_xnor <span class="hljs-keyword">is</span><br>  <span class="hljs-keyword">port</span> (A, B: <span class="hljs-keyword">in</span>  <span class="hljs-built_in">std_logic</span>;<br>        F   : <span class="hljs-keyword">out</span> <span class="hljs-built_in">std_logic</span>);<br>  <span class="hljs-keyword">end</span> <span class="hljs-keyword">component</span>;<br>  <span class="hljs-keyword">signal</span> A, B, F: <span class="hljs-built_in">std_logic</span>;<br><span class="hljs-keyword">begin</span><br>  uut: big_xnor <span class="hljs-keyword">port</span> <span class="hljs-keyword">map</span> (A=&gt;A, B=&gt;B, F=&gt;F);<br>  stim_proc: <span class="hljs-keyword">process</span><br>  <span class="hljs-keyword">begin</span><br>    A &lt;= <span class="hljs-string">&#x27;0&#x27;</span>; B &lt;= <span class="hljs-string">&#x27;0&#x27;</span>; <span class="hljs-keyword">wait</span> <span class="hljs-keyword">for</span> <span class="hljs-number">10</span> ns;<br>    A &lt;= <span class="hljs-string">&#x27;0&#x27;</span>; B &lt;= <span class="hljs-string">&#x27;1&#x27;</span>; <span class="hljs-keyword">wait</span> <span class="hljs-keyword">for</span> <span class="hljs-number">10</span> ns;<br>    A &lt;= <span class="hljs-string">&#x27;1&#x27;</span>; B &lt;= <span class="hljs-string">&#x27;0&#x27;</span>; <span class="hljs-keyword">wait</span> <span class="hljs-keyword">for</span> <span class="hljs-number">10</span> ns;<br>    A &lt;= <span class="hljs-string">&#x27;1&#x27;</span>; B &lt;= <span class="hljs-string">&#x27;1&#x27;</span>; <span class="hljs-keyword">wait</span> <span class="hljs-keyword">for</span> <span class="hljs-number">10</span> ns;<br>    <span class="hljs-keyword">wait</span>;<br>  <span class="hljs-keyword">end</span> <span class="hljs-keyword">process</span>;<br><span class="hljs-keyword">end</span> behavior;<br></code></pre></td></tr></table></figure>
+<ul>
+<li>一个test bench 是一个封闭的系统，没有输入输出，正如开头entity没有输入输出一样</li>
+<li>声明UUT component以及中间信号</li>
+<li>赋值输入激励</li>
+</ul>
+<h2 id="时钟信号">时钟信号</h2>
+<figure class="highlight vhdl"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><code class="hljs VHDL"><span class="hljs-keyword">entity</span> DFF_tb <span class="hljs-keyword">is</span><br><span class="hljs-keyword">end</span> DFF_tb;<br><span class="hljs-keyword">architecture</span> behavior <span class="hljs-keyword">of</span> DFF_tb <span class="hljs-keyword">is</span><br>  <span class="hljs-keyword">component</span> DFF <span class="hljs-keyword">is</span><br>  <span class="hljs-keyword">port</span> (D, CLK: <span class="hljs-keyword">in</span>  <span class="hljs-built_in">std_logic</span>;<br>        Q     : <span class="hljs-keyword">out</span> <span class="hljs-built_in">std_logic</span>);<br>  <span class="hljs-keyword">end</span> <span class="hljs-keyword">component</span>;<br>  <span class="hljs-keyword">signal</span> D, CLK, Q: <span class="hljs-built_in">std_logic</span> := <span class="hljs-string">&#x27;0&#x27;</span>;<br>  <span class="hljs-keyword">constant</span> period: <span class="hljs-built_in">TIME</span> := <span class="hljs-number">10</span> ns;<br><span class="hljs-keyword">begin</span><br>  uut: DFF <span class="hljs-keyword">port</span> <span class="hljs-keyword">map</span> (D=&gt;D, CLK=&gt;CLK, Q=&gt;Q);<br>  stim_clk: <span class="hljs-keyword">process</span><br>  <span class="hljs-keyword">begin</span><br>    CLK &lt;= <span class="hljs-string">&#x27;1&#x27;</span>; <span class="hljs-keyword">wait</span> <span class="hljs-keyword">for</span> (period / <span class="hljs-number">2</span>);<br>    CLK &lt;= <span class="hljs-string">&#x27;0&#x27;</span>; <span class="hljs-keyword">wait</span> <span class="hljs-keyword">for</span> (period / <span class="hljs-number">2</span>);<br>  <span class="hljs-keyword">end</span> <span class="hljs-keyword">process</span>;<br>  stim_proc: <span class="hljs-keyword">process</span><br>  <span class="hljs-keyword">begin</span><br>  <span class="hljs-comment">--在这里添加输入激励--</span><br>  <span class="hljs-keyword">end</span> <span class="hljs-keyword">process</span>;<br><span class="hljs-keyword">end</span> behavior;<br></code></pre></td></tr></table></figure>
+<ul>
+<li>通过操作符“:=”来给某个中间信号或者常量进行初始化赋值</li>
+<li>通过使用constant关键字声明常量</li>
+</ul>
+<h2 id="练习">练习</h2>
+<ul>
+<li>给FA写一个testbench，以下是FA的entity</li>
+<li>需要测试所有情况</li>
+<li>因为模块是组合电路，所以不需要时钟信号</li>
+</ul>
+<figure class="highlight vhdl"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs VHDL"><span class="hljs-keyword">entity</span> FA <span class="hljs-keyword">is</span><br><span class="hljs-keyword">port</span> (X, Y, CIN: <span class="hljs-keyword">in</span>  <span class="hljs-built_in">std_logic</span>;<br>      S, COUT  : <span class="hljs-keyword">out</span> <span class="hljs-built_in">std_logic</span>);<br><span class="hljs-keyword">end</span> FA; <br></code></pre></td></tr></table></figure>
+<ul>
+<li>architecture</li>
+</ul>
+<figure class="highlight vhdl"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs VHDL"><span class="hljs-keyword">architecture</span> behavior <span class="hljs-keyword">of</span> full_adder <span class="hljs-keyword">is</span><br>  S &lt;= (X <span class="hljs-keyword">xnor</span> B) <span class="hljs-keyword">xnor</span> CIN:<br>  C_OUT &lt;= (A <span class="hljs-keyword">and</span> B) <span class="hljs-keyword">or</span> (CIN <span class="hljs-keyword">and</span> (A <span class="hljs-keyword">xnor</span> B));<br><span class="hljs-keyword">end</span> behavior;<br></code></pre></td></tr></table></figure>
+<ul>
+<li>testbench</li>
+</ul>
+<figure class="highlight vhdl"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br></pre></td><td class="code"><pre><code class="hljs VHDL"><span class="hljs-keyword">library</span> IEEE;<br><span class="hljs-keyword">use</span> IEEE.STD_LOGIC_1164.<span class="hljs-keyword">ALL</span>;<br><br><span class="hljs-comment">-- 没有端口的testbench entity</span><br><span class="hljs-keyword">entity</span> tb_full_adder <span class="hljs-keyword">is</span><br><span class="hljs-keyword">end</span> tb_full_adder;<br><br><span class="hljs-keyword">architecture</span> testbench <span class="hljs-keyword">of</span> tb_full_adder <span class="hljs-keyword">is</span><br>    <span class="hljs-comment">-- 组件声明</span><br>    <span class="hljs-keyword">component</span> full_adder<br>        <span class="hljs-keyword">Port</span> ( A    : <span class="hljs-keyword">in</span>  <span class="hljs-built_in">STD_LOGIC</span>;<br>               B    : <span class="hljs-keyword">in</span>  <span class="hljs-built_in">STD_LOGIC</span>;<br>               Cin  : <span class="hljs-keyword">in</span>  <span class="hljs-built_in">STD_LOGIC</span>;<br>               Sum  : <span class="hljs-keyword">out</span> <span class="hljs-built_in">STD_LOGIC</span>;<br>               Cout : <span class="hljs-keyword">out</span> <span class="hljs-built_in">STD_LOGIC</span>);<br>    <span class="hljs-keyword">end</span> <span class="hljs-keyword">component</span>;<br>    <br>    <span class="hljs-comment">-- 信号声明，用于连接 DUT (Design Under Test)</span><br>    <span class="hljs-keyword">signal</span> A, B, Cin : <span class="hljs-built_in">STD_LOGIC</span>;<br>    <span class="hljs-keyword">signal</span> Sum, Cout : <span class="hljs-built_in">STD_LOGIC</span>;<br><br><span class="hljs-keyword">begin</span><br>    <span class="hljs-comment">-- 实例化 Full Adder</span><br>    uut: full_adder <span class="hljs-keyword">port</span> <span class="hljs-keyword">map</span> (<br>        A =&gt; A,<br>        B =&gt; B,<br>        Cin =&gt; Cin,<br>        Sum =&gt; Sum,<br>        Cout =&gt; Cout<br>    );<br><br>    <span class="hljs-comment">-- 测试过程</span><br>    <span class="hljs-keyword">process</span><br>    <span class="hljs-keyword">begin</span><br>        <span class="hljs-comment">-- 测试向量 1: A = 0, B = 0, Cin = 0</span><br>        A &lt;= <span class="hljs-string">&#x27;0&#x27;</span>;<br>        B &lt;= <span class="hljs-string">&#x27;0&#x27;</span>;<br>        Cin &lt;= <span class="hljs-string">&#x27;0&#x27;</span>;<br>        <span class="hljs-keyword">wait</span> <span class="hljs-keyword">for</span> <span class="hljs-number">10</span> ns;<br>        <br>        <span class="hljs-comment">-- 测试向量 2: A = 0, B = 0, Cin = 1</span><br>        A &lt;= <span class="hljs-string">&#x27;0&#x27;</span>;<br>        B &lt;= <span class="hljs-string">&#x27;0&#x27;</span>;<br>        Cin &lt;= <span class="hljs-string">&#x27;1&#x27;</span>;<br>        <span class="hljs-keyword">wait</span> <span class="hljs-keyword">for</span> <span class="hljs-number">10</span> ns;<br><br>        <span class="hljs-comment">-- 测试向量 3: A = 0, B = 1, Cin = 0</span><br>        A &lt;= <span class="hljs-string">&#x27;0&#x27;</span>;<br>        B &lt;= <span class="hljs-string">&#x27;1&#x27;</span>;<br>        Cin &lt;= <span class="hljs-string">&#x27;0&#x27;</span>;<br>        <span class="hljs-keyword">wait</span> <span class="hljs-keyword">for</span> <span class="hljs-number">10</span> ns;<br><br>        <span class="hljs-comment">-- 测试向量 4: A = 0, B = 1, Cin = 1</span><br>        A &lt;= <span class="hljs-string">&#x27;0&#x27;</span>;<br>        B &lt;= <span class="hljs-string">&#x27;1&#x27;</span>;<br>        Cin &lt;= <span class="hljs-string">&#x27;1&#x27;</span>;<br>        <span class="hljs-keyword">wait</span> <span class="hljs-keyword">for</span> <span class="hljs-number">10</span> ns;<br><br>        <span class="hljs-comment">-- 测试向量 5: A = 1, B = 0, Cin = 0</span><br>        A &lt;= <span class="hljs-string">&#x27;1&#x27;</span>;<br>        B &lt;= <span class="hljs-string">&#x27;0&#x27;</span>;<br>        Cin &lt;= <span class="hljs-string">&#x27;0&#x27;</span>;<br>        <span class="hljs-keyword">wait</span> <span class="hljs-keyword">for</span> <span class="hljs-number">10</span> ns;<br><br>        <span class="hljs-comment">-- 测试向量 6: A = 1, B = 0, Cin = 1</span><br>        A &lt;= <span class="hljs-string">&#x27;1&#x27;</span>;<br>        B &lt;= <span class="hljs-string">&#x27;0&#x27;</span>;<br>        Cin &lt;= <span class="hljs-string">&#x27;1&#x27;</span>;<br>        <span class="hljs-keyword">wait</span> <span class="hljs-keyword">for</span> <span class="hljs-number">10</span> ns;<br><br>        <span class="hljs-comment">-- 测试向量 7: A = 1, B = 1, Cin = 0</span><br>        A &lt;= <span class="hljs-string">&#x27;1&#x27;</span>;<br>        B &lt;= <span class="hljs-string">&#x27;1&#x27;</span>;<br>        Cin &lt;= <span class="hljs-string">&#x27;0&#x27;</span>;<br>        <span class="hljs-keyword">wait</span> <span class="hljs-keyword">for</span> <span class="hljs-number">10</span> ns;<br><br>        <span class="hljs-comment">-- 测试向量 8: A = 1, B = 1, Cin = 1</span><br>        A &lt;= <span class="hljs-string">&#x27;1&#x27;</span>;<br>        B &lt;= <span class="hljs-string">&#x27;1&#x27;</span>;<br>        Cin &lt;= <span class="hljs-string">&#x27;1&#x27;</span>;<br>        <span class="hljs-keyword">wait</span> <span class="hljs-keyword">for</span> <span class="hljs-number">10</span> ns;<br><br>        <span class="hljs-comment">-- 结束测试</span><br>        <span class="hljs-keyword">wait</span>;<br>    <span class="hljs-keyword">end</span> <span class="hljs-keyword">process</span>;<br><span class="hljs-keyword">end</span> testbench;<br><br></code></pre></td></tr></table></figure>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/henry.github.io/categories/%E7%AC%94%E8%AE%B0/" class="category-chain-item">笔记</a>
+  
+  
+    <span>></span>
+    
+  <a href="/henry.github.io/categories/%E7%AC%94%E8%AE%B0/%E6%95%B0%E5%AD%97%E7%94%B5%E8%B7%AF/" class="category-chain-item">数字电路</a>
+  
+  
+
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/henry.github.io/tags/%E7%AC%94%E8%AE%B0/" class="print-no-link">#笔记</a>
+      
+        <a href="/henry.github.io/tags/%E6%95%B0%E5%AD%97%E7%94%B5%E8%B7%AF/" class="print-no-link">#数字电路</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>VHDL（三）Testbench与仿真</div>
+      <div>https://jhr419.github.io/henry.github.io/2024/09/28/VHDL-Testbench与仿真/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>Henry Jin</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2024年9月28日</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>更新于</div>
+          <div>2024年9月30日</div>
+        </div>
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/henry.github.io/2024/09/28/VHDL%E7%94%B5%E8%B7%AF%E6%A8%A1%E5%9E%8B/" title="VHDL（二）电路模型">
+                        <span class="hidden-mobile">VHDL（二）电路模型</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+  
+  
+    <article id="comments" lazyload>
+      
+
+    </article>
+  
+
+
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+  
+  
+
+
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://github.com/jhr419" target="_blank" rel="nofollow noopener"><span>Henry</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+    <div class="statistics">
+  
+  
+
+  
+    
+      <span id="busuanzi_container_site_pv" style="display: none">
+        总访问量 
+        <span id="busuanzi_value_site_pv"></span>
+         次
+      </span>
+    
+    
+      <span id="busuanzi_container_site_uv" style="display: none">
+        总访客数 
+        <span id="busuanzi_value_site_uv"></span>
+         人
+      </span>
+    
+    
+  
+</div>
+
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/henry.github.io/js/events.js" ></script>
+<script  src="/henry.github.io/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/henry.github.io/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  var relativeDate = function() {
+    var updatedTime = document.getElementById('updated-time');
+    if (updatedTime) {
+      var text = updatedTime.textContent;
+      var reg = /\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(?:Z|[+-]\d{2}:\d{2})/;
+      var matchs = text.match(reg);
+      if (matchs) {
+        var relativeTime = moment(matchs[0]).fromNow();
+        updatedTime.textContent = text.replace(reg, relativeTime);
+      }
+      updatedTime.style.display = '';
+    }
+  };
+  Fluid.utils.createScript('https://lib.baomitu.com/moment.js/2.29.4/moment.min.js', function() {
+    if (!'zh-cn'.startsWith('en')) {
+      Fluid.utils.createScript('https://lib.baomitu.com/moment.js/2.29.4/locale/zh-cn.min.js', function() {
+        relativeDate();
+      });
+    } else {
+      relativeDate();
+    }
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  
+      <script>
+        if (!window.MathJax) {
+          window.MathJax = {
+            tex    : {
+              inlineMath: { '[+]': [['$', '$']] }
+            },
+            loader : {
+              load: ['ui/lazy']
+            },
+            options: {
+              renderActions: {
+                insertedScript: [200, () => {
+                  document.querySelectorAll('mjx-container').forEach(node => {
+                    let target = node.parentNode;
+                    if (target.nodeName.toLowerCase() === 'li') {
+                      target.parentNode.classList.add('has-jax');
+                    }
+                  });
+                }, '', false]
+              }
+            }
+          };
+        } else {
+          MathJax.startup.document.state(0);
+          MathJax.texReset();
+          MathJax.typeset();
+          MathJax.typesetPromise();
+        }
+
+        Fluid.events.registerRefreshCallback(function() {
+          if ('MathJax' in window && MathJax.startup.document && typeof MathJax.startup.document.state === 'function') {
+            MathJax.startup.document.state(0);
+            MathJax.texReset();
+            MathJax.typeset();
+            MathJax.typesetPromise();
+          }
+        });
+      </script>
+    
+
+  <script  src="https://lib.baomitu.com/mathjax/3.2.2/es5/tex-mml-chtml.js" ></script>
+
+  <script  src="/henry.github.io/js/local-search.js" ></script>
+
+  <script defer src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/henry.github.io/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>
