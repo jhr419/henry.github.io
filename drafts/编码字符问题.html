@@ -18,26 +18,23 @@
   <meta name="author" content="Henry Jin">
   <meta name="keywords" content="">
   
-    <meta name="description" content="时钟树 锁相环 GPIO输出模式 推挽开漏 神奇的bug：项目名不能有特殊符号例如&amp; cfg文件 debug配置 svd文件">
+    <meta name="description" content="留坑先，后续抽空填坑 路径字符变量编码问题 1234567891011for(size_t i&#x3D;0;i&lt;PLAYER_ANIM_NUM;i++)    &#123;        std::string path &#x3D; &quot;..&#x2F;img&#x2F;player_left_&quot; + std::to_string(i) + &quot;.png&quot;;        loadimage">
 <meta property="og:type" content="website">
-<meta property="og:title" content="STM32开发—(一)配置CubeMX">
-<meta property="og:url" content="https://jhr419.github.io/henry.github.io/drafts/STM32%E5%BC%80%E5%8F%91%E2%80%94-%E4%B8%80-%E9%85%8D%E7%BD%AECubeMX">
+<meta property="og:title" content="游戏开发实战过程中遇到的问题">
+<meta property="og:url" content="https://jhr419.github.io/henry.github.io/drafts/%E7%BC%96%E7%A0%81%E5%AD%97%E7%AC%A6%E9%97%AE%E9%A2%98">
 <meta property="og:site_name" content="Henry&#39;s Blog">
-<meta property="og:description" content="时钟树 锁相环 GPIO输出模式 推挽开漏 神奇的bug：项目名不能有特殊符号例如&amp; cfg文件 debug配置 svd文件">
+<meta property="og:description" content="留坑先，后续抽空填坑 路径字符变量编码问题 1234567891011for(size_t i&#x3D;0;i&lt;PLAYER_ANIM_NUM;i++)    &#123;        std::string path &#x3D; &quot;..&#x2F;img&#x2F;player_left_&quot; + std::to_string(i) + &quot;.png&quot;;        loadimage">
 <meta property="og:locale" content="zh_CN">
-<meta property="article:published_time" content="2024-07-12T10:16:03.000Z">
-<meta property="article:modified_time" content="2024-07-13T06:02:06.954Z">
+<meta property="article:published_time" content="2024-10-14T12:47:24.000Z">
+<meta property="article:modified_time" content="2024-10-14T13:20:11.370Z">
 <meta property="article:author" content="Henry Jin">
-<meta property="article:tag" content="嵌入式">
-<meta property="article:tag" content="STM">
-<meta property="article:tag" content="教学">
 <meta name="twitter:card" content="summary_large_image">
   
   
     <meta name="referrer" content="no-referrer-when-downgrade">
   
   
-  <title>STM32开发—(一)配置CubeMX - Henry&#39;s Blog</title>
+  <title>游戏开发实战过程中遇到的问题 - Henry&#39;s Blog</title>
 
   <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
 
@@ -236,7 +233,7 @@
       <div class="banner-text text-center fade-in-up">
         <div class="h2">
           
-            <span id="subtitle" data-typed-text="STM32开发—(一)配置CubeMX"></span>
+            <span id="subtitle" data-typed-text="游戏开发实战过程中遇到的问题"></span>
           
         </div>
 
@@ -264,13 +261,15 @@
                 
 
 <article class="page-content">
-  <p>时钟树<br>
-锁相环</p>
-<p>GPIO输出模式 推挽开漏</p>
-<p>神奇的bug：项目名不能有特殊符号例如&amp;</p>
-<p>cfg文件</p>
-<p>debug配置</p>
-<p>svd文件</p>
+  <p>留坑先，后续抽空填坑</p>
+<h1>路径字符变量编码问题</h1>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs C++"><span class="hljs-keyword">for</span>(<span class="hljs-type">size_t</span> i=<span class="hljs-number">0</span>;i&lt;PLAYER_ANIM_NUM;i++)<br>    &#123;<br>        std::string path = <span class="hljs-string">&quot;../img/player_left_&quot;</span> + std::<span class="hljs-built_in">to_string</span>(i) + <span class="hljs-string">&quot;.png&quot;</span>;<br>        <span class="hljs-built_in">loadimage</span>(&amp;img_player_left[i], _T(<span class="hljs-built_in">reinterpret_cast</span>&lt;LPCTSTR&gt;(path.<span class="hljs-built_in">c_str</span>())));<br>    &#125;<br><br><span class="hljs-keyword">for</span>(<span class="hljs-type">size_t</span> i=<span class="hljs-number">0</span>;i&lt;PLAYER_ANIM_NUM;i++)<br>&#123;<br>    std::wstring path = _T(<span class="hljs-string">L&quot;img/player_right_&quot;</span> + std::<span class="hljs-built_in">to_wstring</span>(i) + <span class="hljs-string">L&quot;.png&quot;</span>);<br>    <span class="hljs-built_in">loadimage</span>(&amp;img_player_right[i], <span class="hljs-built_in">reinterpret_cast</span>&lt;LPCTSTR&gt;(path.<span class="hljs-built_in">c_str</span>()));<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>这两段代码不同之处主要在于路径字符变量不同编码</p>
+<h1>关于外部链接库问题</h1>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs C++"><span class="hljs-meta">#<span class="hljs-keyword">pragma</span> comment(lib,<span class="hljs-string">&quot;MSIMG32.LIB&quot;</span>)</span><br><br><span class="hljs-function"><span class="hljs-keyword">inline</span> <span class="hljs-type">void</span> <span class="hljs-title">putimage_alpha</span><span class="hljs-params">(<span class="hljs-type">int</span> x, <span class="hljs-type">int</span> y, IMAGE* img)</span></span><br><span class="hljs-function"></span>&#123;<br>    <span class="hljs-type">int</span> w = img-&gt;<span class="hljs-built_in">getwidth</span>();<br>    <span class="hljs-type">int</span> h = img-&gt;<span class="hljs-built_in">getheight</span>();<br>    <span class="hljs-built_in">AlphaBlend</span>(<span class="hljs-built_in">GetImageHDC</span>(<span class="hljs-literal">NULL</span>),x,y,w,h,<br>               <span class="hljs-built_in">GetImageHDC</span>(img),<span class="hljs-number">0</span>,<span class="hljs-number">0</span>,w,h,&#123;AC_SRC_OVER, <span class="hljs-number">0</span>, <span class="hljs-number">255</span>, AC_SRC_ALPHA&#125;);<br>&#125;<br></code></pre></td></tr></table></figure>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><code class="hljs cpp">这段代码使用了两个关键指令：<span class="hljs-meta">#<span class="hljs-keyword">pragma</span> comment(lib, <span class="hljs-string">&quot;MSIMG32.LIB&quot;</span>) 和 inline。下面我分别解释它们的含义。</span><br><br><span class="hljs-number">1.</span> <span class="hljs-meta">#<span class="hljs-keyword">pragma</span> comment(lib, <span class="hljs-string">&quot;MSIMG32.LIB&quot;</span>)</span><br>   作用: 这是一个编译器指令，用来告诉编译器在链接阶段自动链接指定的库文件。在这种情况下，链接的是 MSIMG32.LIB，这是 Windows 图形库的一部分，用于处理图像透明度、Alpha混合等功能。<br><br>MSIMG32.LIB: 这是一个 Windows 系统库，包含与图像处理相关的函数，例如透明度处理、Alpha通道、图像混合等。函数如 AlphaBlend 就定义在这个库中，用于在绘图时处理透明度。<br><br>为什么使用它: <span class="hljs-meta">#<span class="hljs-keyword">pragma</span> comment(lib, <span class="hljs-string">&quot;MSIMG32.LIB&quot;</span>) 可以省略在项目的编译设置中手动添加库的步骤。通过这种方式，编译器在编译过程中会自动寻找并链接这个库文件。这使得代码在不同的项目中更具移植性和方便性。</span><br><br><span class="hljs-number">2.</span> <span class="hljs-keyword">inline</span><br>   作用: <span class="hljs-keyword">inline</span> 关键字用于函数定义，告诉编译器尽量在调用该函数的地方直接插入函数代码，而不是通过常规的函数调用机制。这有助于减少函数调用的开销（比如跳转指令和栈操作），从而提高性能，尤其是当函数很小或调用频繁时。<br><br>适用场景: 对于像 putimage_alpha 这样的小函数，<span class="hljs-keyword">inline</span> 可以避免函数调用带来的开销，尤其是在循环中多次调用时。编译器会尝试在每次调用该函数时将函数体展开，以减少不必要的调用开销。<br><br>注意事项: <span class="hljs-keyword">inline</span> 是建议性而非强制性的，编译器可以根据优化策略决定是否真正将函数内联。有些情况下（例如函数太大，或编译器优化设置不同），编译器可能会忽略 <span class="hljs-keyword">inline</span> 并使用正常的函数调用。<br><br>总结：<br><span class="hljs-meta">#<span class="hljs-keyword">pragma</span> comment(lib, <span class="hljs-string">&quot;MSIMG32.LIB&quot;</span>): 自动链接 MSIMG32.LIB 库文件，省去手动配置步骤，通常用于处理图像透明度等图形操作。</span><br><span class="hljs-keyword">inline</span>: 提示编译器将函数展开以优化性能，适用于小且频繁调用的函数。<br>在你的代码片段中，putimage_alpha 函数可能是要处理图片显示时的透明度或混合操作，结合 MSIMG32.LIB 中的函数来实现。<br><br></code></pre></td></tr></table></figure>
+<p>另外重点看连接外部库问题</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><code class="hljs Cmakelists.txt">cmake_minimum_required(VERSION 3.10)<br>project(Tivat_Continent)<br><br>set(SOURCES main.cpp)<br><br># 定义可执行目标<br>add_executable(Tivat_Continent $&#123;SOURCES&#125;)<br><br># 链接 MSIMG32 系统库<br>target_link_libraries(Tivat_Continent PRIVATE msimg32)//<br></code></pre></td></tr></table></figure>
 
 
   
