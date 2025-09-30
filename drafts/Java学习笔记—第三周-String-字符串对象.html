@@ -1,0 +1,579 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/henry.github.io/img/Icon.png">
+  <link rel="icon" href="/henry.github.io/img/Icon.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+    <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="Henry Jin">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="String不是Java中的基本类型，而是一个对象。 也有说法是String即是类也是对象： https:&#x2F;&#x2F;www.cnblogs.com&#x2F;ljl666&#x2F;p&#x2F;ljl666.html 创建字符串 由String关键字创建的字符串存储在常量池中，而new创建的字符串对象存储在堆中 12345String s1 &#x3D; &quot;Runoob&quot;;              &#x2F;&#x2F; String">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Java学习笔记—第三周-String-字符串对象">
+<meta property="og:url" content="https://jhr419.github.io/henry.github.io/drafts/Java%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E2%80%94%E7%AC%AC%E4%B8%89%E5%91%A8-String-%E5%AD%97%E7%AC%A6%E4%B8%B2%E5%AF%B9%E8%B1%A1">
+<meta property="og:site_name" content="Henry&#39;s Blog">
+<meta property="og:description" content="String不是Java中的基本类型，而是一个对象。 也有说法是String即是类也是对象： https:&#x2F;&#x2F;www.cnblogs.com&#x2F;ljl666&#x2F;p&#x2F;ljl666.html 创建字符串 由String关键字创建的字符串存储在常量池中，而new创建的字符串对象存储在堆中 12345String s1 &#x3D; &quot;Runoob&quot;;              &#x2F;&#x2F; String">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://github.com/jhr419/henry.github.io/blob/master/img/Java%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E2%80%94%E7%AC%AC%E4%B8%89%E5%91%A8-String-%E5%AD%97%E7%AC%A6%E4%B8%B2%E5%AF%B9%E8%B1%A1/pic1.png?raw=true">
+<meta property="article:published_time" content="2024-06-08T01:06:15.000Z">
+<meta property="article:modified_time" content="2024-09-27T08:30:12.676Z">
+<meta property="article:author" content="Henry Jin">
+<meta property="article:tag" content="Java">
+<meta property="article:tag" content="笔记">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://github.com/jhr419/henry.github.io/blob/master/img/Java%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E2%80%94%E7%AC%AC%E4%B8%89%E5%91%A8-String-%E5%AD%97%E7%AC%A6%E4%B8%B2%E5%AF%B9%E8%B1%A1/pic1.png?raw=true">
+  
+  
+    <meta name="referrer" content="no-referrer-when-downgrade">
+  
+  
+  <title>Java学习笔记—第三周-String-字符串对象 - Henry&#39;s Blog</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/henry.github.io/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/henry.github.io/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/henry.github.io/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"jhr419.github.io","root":"/henry.github.io/","version":"1.9.7","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"left","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":true,"follow_dnt":false,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/henry.github.io/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/henry.github.io/js/utils.js" ></script>
+  <script  src="/henry.github.io/js/color-schema.js" ></script>
+  
+
+  
+
+  
+    <!-- Google tag (gtag.js) -->
+    <script async>
+      if (!Fluid.ctx.dnt) {
+        Fluid.utils.createScript("https://www.googletagmanager.com/gtag/js?id=", function() {
+          window.dataLayer = window.dataLayer || [];
+          function gtag() {
+            dataLayer.push(arguments);
+          }
+          gtag('js', new Date());
+          gtag('config', '');
+        });
+      }
+    </script>
+  
+
+  
+
+  
+
+  
+
+  
+
+
+
+  
+<meta name="generator" content="Hexo 7.2.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 60vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/henry.github.io/">
+      <strong>Henry&#39;s Blog</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/henry.github.io/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/henry.github.io/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/henry.github.io/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/henry.github.io/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/henry.github.io/about/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/henry.github.io/links/" target="_self">
+                <i class="iconfont icon-link-fill"></i>
+                <span>友链</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/henry.github.io/img/background.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="Java学习笔记—第三周-String-字符串对象"></span>
+          
+        </div>
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      <div class="container nopadding-x-md">
+        <div id="board"
+          >
+          
+          <div class="container">
+            <div class="row">
+              <div class="col-12 col-md-10 m-auto">
+                
+
+<article class="page-content">
+  <p>String不是Java中的基本类型，而是一个对象。</p>
+<p>也有说法是String即是类也是对象：</p>
+<p><a target="_blank" rel="noopener" href="https://www.cnblogs.com/ljl666/p/ljl666.html">https://www.cnblogs.com/ljl666/p/ljl666.html</a></p>
+<h1>创建字符串</h1>
+<p>由String关键字创建的字符串存储在常量池中，而new创建的字符串对象存储在堆中</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-type">String</span> <span class="hljs-variable">s1</span> <span class="hljs-operator">=</span> <span class="hljs-string">&quot;Runoob&quot;</span>;              <span class="hljs-comment">// String 直接创建，最简单的创建方式</span><br><span class="hljs-type">String</span> <span class="hljs-variable">s2</span> <span class="hljs-operator">=</span> <span class="hljs-string">&quot;Runoob&quot;</span>;              <span class="hljs-comment">// String 直接创建</span><br><span class="hljs-type">String</span> <span class="hljs-variable">s3</span> <span class="hljs-operator">=</span> s1;                    <span class="hljs-comment">// 相同引用</span><br><span class="hljs-type">String</span> <span class="hljs-variable">s4</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">String</span>(<span class="hljs-string">&quot;Runoob&quot;</span>);   <span class="hljs-comment">// String 对象创建</span><br><span class="hljs-type">String</span> <span class="hljs-variable">s5</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">String</span>(<span class="hljs-string">&quot;Runoob&quot;</span>);   <span class="hljs-comment">// String 对象创建</span><br></code></pre></td></tr></table></figure>
+<p><img src="https://github.com/jhr419/henry.github.io/blob/master/img/Java%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E2%80%94%E7%AC%AC%E4%B8%89%E5%91%A8-String-%E5%AD%97%E7%AC%A6%E4%B8%B2%E5%AF%B9%E8%B1%A1/pic1.png?raw=true" srcset="/henry.github.io/img/loading.gif" lazyload alt="pic1"><br>
+什么是池？常量池？</p>
+<p><a target="_blank" rel="noopener" href="https://cloud.tencent.com/developer/article/1450501">https://cloud.tencent.com/developer/article/1450501</a></p>
+<ol>
+<li>
+<p>String是不可改变（immutable）的对象：出于安全性和最小化内存占用考虑</p>
+<p>举例说明：</p>
+ <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-type">String</span> <span class="hljs-variable">s</span> <span class="hljs-operator">=</span> <span class="hljs-string">&quot;Google&quot;</span>;<br>System.out.println(<span class="hljs-string">&quot;s = &quot;</span> + s);<br><br>s = <span class="hljs-string">&quot;Runoob&quot;</span>;<br>System.out.println(<span class="hljs-string">&quot;s = &quot;</span> + s);<br><br><span class="hljs-comment">//输出为：</span><br><span class="hljs-comment">//Google</span><br><span class="hljs-comment">//Runoob</span><br></code></pre></td></tr></table></figure>
+<p>从结果上来看，似乎是被改变了，那为什么还说String对象是不可变的呢？</p>
+<p>原因是：实例中的s只是一个String对象的引用，并不是对象本身，当执行</p>
+<p>s=”Runoob”; 创建了一个新的对象“Runoob”，而原来的“Google”还存在于内存中。</p>
+<ol>
+<li>这里创建的是String对象的字面值（literals），这些字面值在创建时被JVM存放在字符池（String Pool）中。</li>
+<li>若已经内存中有一个相同字面值的String类型，那么JVM不会创建一个新的副本，（duplicate）而是新建一个对象引用，指向已有的字符串对象</li>
+<li>Garbage Collector 不会清理String Pool.</li>
+</ol>
+</li>
+</ol>
+<p>提问：下面两个例子中打印结果是什么？</p>
+<p>例1：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-type">Rabbit</span> <span class="hljs-variable">r1</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">Rabbit</span>();<br>r1.setName(“Benji”);<br><span class="hljs-type">Rabbit</span> <span class="hljs-variable">r2</span> <span class="hljs-operator">=</span> r1;<br>r2.setName(“Blinky”); Prints:<br>System.out.println(r1.getName());<br>System.out.println(r2.getName());<br></code></pre></td></tr></table></figure>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs java">Blinky<br>Blinky<br></code></pre></td></tr></table></figure>
+<p>例2：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-type">String</span> <span class="hljs-variable">s1</span> <span class="hljs-operator">=</span> “Sherlock”;<br><span class="hljs-type">String</span> <span class="hljs-variable">s2</span> <span class="hljs-operator">=</span> s1;<br>s2 = “Holmes”; Prints:<br>System.out.println(s1);<br>System.out.println(s2);<br></code></pre></td></tr></table></figure>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs java">Sherlock<br>Holmes<br></code></pre></td></tr></table></figure>
+<h1>String类</h1>
+<h2 id="构造器：">构造器：</h2>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-type">String</span> <span class="hljs-variable">s</span> <span class="hljs-operator">=</span> <span class="hljs-string">&quot;HelloWorld!&quot;</span>; <span class="hljs-comment">// s = “HelloWorld”</span><br><span class="hljs-type">String</span> <span class="hljs-variable">s</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">String</span>(<span class="hljs-string">&quot;HelloWorld!&quot;</span>); <span class="hljs-comment">// s = “HelloWorld”</span><br><span class="hljs-type">String</span> <span class="hljs-variable">s</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">String</span>(); <span class="hljs-comment">// s is an empty string</span><br><br><span class="hljs-comment">//这里比较有意思，可以用字符数组来创建新的String对象</span><br><span class="hljs-type">char</span>[] Cat_Array =&#123;<span class="hljs-string">&#x27;t&#x27;</span>,<span class="hljs-string">&#x27;i&#x27;</span>,<span class="hljs-string">&#x27;g&#x27;</span>,<span class="hljs-string">&#x27;e&#x27;</span>,<span class="hljs-string">&#x27;r&#x27;</span>,<span class="hljs-string">&#x27;s&#x27;</span>&#125;; <span class="hljs-comment">// like an array</span><br><span class="hljs-type">String</span> <span class="hljs-variable">s</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">String</span>(Cat_Array); <span class="hljs-comment">// s = “tigers”</span><br><span class="hljs-type">String</span> <span class="hljs-variable">s</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">String</span>(Cat_Array,<span class="hljs-number">1</span>,<span class="hljs-number">2</span>); <span class="hljs-comment">// s = “ig”</span><br></code></pre></td></tr></table></figure>
+<h2 id="方法">方法</h2>
+<ol>
+<li>
+<p>int length( )：返回该String对象的字符数量，包括所有类型字符，空格等。</p>
+</li>
+<li>
+<p>char charAt( int index )：返回index角标位置的字符。</p>
+</li>
+<li>
+<p>返回位置：</p>
+<ol>
+<li>int indexOf( char ch )：返回字符ch第一次出现时的角标。</li>
+<li>int indexOf( String str )：返回字符串str第一次出现的角标。</li>
+<li>lastIndexOf( char ch )：返回字符ch最后一次出现的角标。</li>
+<li>lastIndexOf( String str )：返回字符串str最后一次出现的角标。</li>
+</ol>
+</li>
+<li>
+<p>boolean equals( obj )</p>
+</li>
+<li>
+<p>boolean equalsIgnoreCase( str )：判断字符串是否相同，不考虑大小写</p>
+</li>
+<li>
+<p>int compareTo( str )</p>
+<ol>
+<li>
+<p>比较两个字符串的字典序差值</p>
+<p>str1.compareTo(str2)</p>
+<p>比较二者第一次出现不同的字符的ASCLL码，用str1的减去str2的</p>
+<p>例如：</p>
+<p>str1=”abc”, str2=”ILoveU”</p>
+<p>str1.compareTo(str2)为 ’a‘的ASCLL码 - ’I‘ 的ASCLL码 = 97 - 73 = 24</p>
+</li>
+<li>
+<p>若二者长度不同，但前面部分完全相同，则，返回长度差值</p>
+</li>
+<li>
+<p>若二者完全相同，则返回0</p>
+</li>
+</ol>
+</li>
+<li>
+<p>substring( index1, index2 )：返回角标1到角标2之间的子串</p>
+<p>substring( index )：返回从角标index到结束的子串</p>
+</li>
+<li>
+<p>concat( s )：连接两个字符串</p>
+ <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-type">String</span> <span class="hljs-variable">s</span> <span class="hljs-operator">=</span> “Hello”.concat(“World”); <span class="hljs-comment">// s = “HelloWorld”</span><br></code></pre></td></tr></table></figure>
+</li>
+<li>
+<p>toUpperCase( ) / toLowerCase( )：将字符串全部转为大/小写</p>
+</li>
+<li>
+<p>toString：将其他类型转为字符串，在构造新的类时，也可以重写toString方法</p>
+ <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-type">double</span> <span class="hljs-variable">d</span> <span class="hljs-operator">=</span> <span class="hljs-number">12.3</span>;<br> <span class="hljs-type">String</span> <span class="hljs-variable">dString</span> <span class="hljs-operator">=</span> Double.toString(d);<br></code></pre></td></tr></table></figure>
+</li>
+<li>
+<p>split( Sstring s )：将字符串以s为界拆分，返回一个String类型数组</p>
+</li>
+<li>
+<p>void getChars( i, j, A, k )：返回字符串中角标 i到j-1的字符数组，放在数组A中，从A中角标k开始。</p>
+</li>
+<li>
+<p>replace(oldCh, newCh )：将所有的oldCh换为newCh</p>
+ <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-type">String</span> <span class="hljs-variable">s</span> <span class="hljs-operator">=</span> “goose”.replace(‘o’,‘e’); <span class="hljs-comment">// s = “geese” </span><br></code></pre></td></tr></table></figure>
+</li>
+</ol>
+<h1>StringBuffer &amp; StringBuilder 类</h1>
+<p>当使用“+”作为字符串连接符时，Java会自动调用StringBuffer类的方法来生成新的字符串：</p>
+<p>Example: If we write “Bugs” + “ Bunny”, Java will automatically call a StringBuffer class method to generate the string “Bugs Bunny”</p>
+<p>老版本使用StringBuffer类，新版本用StringBuilder类</p>
+<h1>Character类</h1>
+<h2 id="一些静态方法">一些静态方法</h2>
+<p>isLetter(char c) // isDigit(char c)<br>
+isUpperCase(char c) // isLowerCase(char c)</p>
+<h2 id="创建对象">创建对象</h2>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-type">Character</span> <span class="hljs-variable">myCharacter</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">Character</span>(‘p’);<br><span class="hljs-type">char</span> <span class="hljs-variable">c</span> <span class="hljs-operator">=</span> myCharacter.charValue();<span class="hljs-comment">// char value wrapped in</span><br>																 <span class="hljs-comment">// the Character object</span><br></code></pre></td></tr></table></figure>
+<h1>StringTokenizer类</h1>
+<h2 id="构造器">构造器</h2>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs java">StringTokenizer(String s)<span class="hljs-comment">//默认分隔符，不会将分隔符记为token</span><br><span class="hljs-comment">//默认分隔符包括：空格，制表符，换行，回车</span><br>StringTokenizer(String s, String delimeters)<span class="hljs-comment">//传入指定分隔符，不记为token</span><br>StringTokenizer(String s, String delimiters, <span class="hljs-type">boolean</span> returnDelimiters)<span class="hljs-comment">//传入指定分隔符，可选是否记为token</span><br></code></pre></td></tr></table></figure>
+<h2 id="使用示例">使用示例</h2>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-type">String</span> <span class="hljs-variable">s</span> <span class="hljs-operator">=</span> “I am from Portugal.<span class="hljs-string">&quot;;</span><br><span class="hljs-string">// Create a StringTokenizer.</span><br><span class="hljs-string">StringTokenizer myTokenizer = new StringTokenizer(s);</span><br><span class="hljs-string">System.out.println(“Number of tokens is “ + </span><br><span class="hljs-string">myTokenizer.countTokens() + “.”);</span><br><span class="hljs-string">while (myTokenizer.hasMoreTokens())</span><br><span class="hljs-string">System.out.println(myTokenizer.nextToken());</span><br></code></pre></td></tr></table></figure>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-comment">//输出</span><br>Number of tokens is <span class="hljs-number">4.</span><br>I<br>am<br>from<br>Portugal.<br></code></pre></td></tr></table></figure>
+<p>其它示例：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-type">StringTokenizer</span> <span class="hljs-variable">myTokenizer</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">StringTokenizer</span>(s, “nu”);<br><span class="hljs-type">StringTokenizer</span> <span class="hljs-variable">myTokenizer</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">StringTokenizer</span>(s, “nu”, <span class="hljs-literal">true</span>);<br></code></pre></td></tr></table></figure>
+<p>！！注意！！</p>
+<p>这里在构造器中填入了 “nu”，作为参数，这里指的是：以”nu”中任一字符，作为分隔符，</p>
+<p>即：遇到”n”或”u”，就分隔，而不是”nu”整体！</p>
+<p>使用第二个构造器的结果：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs java">Number of tokens is <span class="hljs-number">5.</span><br>I am from Port<br>u<br>ga<br>l<br>.<br></code></pre></td></tr></table></figure>
+<p>尝试用split( )方法编写：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-comment">//qnmd 不好写，懒得写了</span><br></code></pre></td></tr></table></figure>
+<h1>例题</h1>
+<p>例1：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-type">StringTokenizer</span> <span class="hljs-variable">stuff</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">StringTokenizer</span>(“abc,def,ghi”);<br>System.out.println(stuff.nextToken());<br></code></pre></td></tr></table></figure>
+<p>输出：由于使用了默认分隔符构造器，而传入的字符串中不包括任何默认分隔符（空格，制表符，换行，回车）故只返回一个子串，即是原字符串</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs java">abc,def,ghi<br></code></pre></td></tr></table></figure>
+<p>例2：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-type">StringTokenizer</span> <span class="hljs-variable">stuff</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">StringTokenizer</span>(“abc,def,ghi”, “,”);<br>System.out.println(stuff.nextToken());<br></code></pre></td></tr></table></figure>
+<p>输出：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs java">abc<br></code></pre></td></tr></table></figure>
+<h1>Scanner类</h1>
+<p>在StringTokenizer 类中，delimiters只能是单独的字符。</p>
+<p>而在Scanner类中，允许使用一个word指定为delimiter</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-type">String</span> <span class="hljs-variable">s</span> <span class="hljs-operator">=</span> “Let your heart guide you.”;<br><span class="hljs-type">Scanner</span> <span class="hljs-variable">myScanner</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">Scanner</span>(s);<br>myScanner.useDelimiter(“you”);<br><span class="hljs-keyword">while</span> (myScanner.hasNext())<br>	System.out.println(myScanner.next());<br></code></pre></td></tr></table></figure>
+<p>输出：使用字符串”you“作为分隔符</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs java">Let<br>r heart guide<br>.<br></code></pre></td></tr></table></figure>
+<h2 id="Scanner其它用法">Scanner其它用法</h2>
+<ol>
+<li>
+<p>可以用来扫描基础类型：</p>
+ <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-type">String</span> <span class="hljs-variable">s</span> <span class="hljs-operator">=</span> <span class="hljs-string">&quot;1 10 100 1000&quot;</span>;<br><span class="hljs-type">Scanner</span> <span class="hljs-variable">myScanner</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">Scanner</span>(s);<br><span class="hljs-type">int</span> <span class="hljs-variable">sum</span> <span class="hljs-operator">=</span> <span class="hljs-number">0</span>;<br><span class="hljs-keyword">while</span> (myScanner.hasNext()) &#123; sum += myScanner.nextInt(); &#125;<br>System.out.println(<span class="hljs-string">&quot;Sum = &quot;</span> + sum);<br></code></pre></td></tr></table></figure>
+<p>使用Scanner中的诸多方法，可以用来获取字符串中的不同基本数据类型</p>
+</li>
+<li>
+<p>获取命令行输入</p>
+ <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs java">System.out.print(<span class="hljs-string">&quot;Please enter an int value: &quot;</span>);<br><span class="hljs-type">Scanner</span> <span class="hljs-variable">myScanner</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">Scanner</span>(System.in);<br><span class="hljs-type">int</span> <span class="hljs-variable">i</span> <span class="hljs-operator">=</span> myScanner.nextInt();<br></code></pre></td></tr></table></figure>
+</li>
+</ol>
+<h1>格式化标识符</h1>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs java">% [argument_number$] [flags] [width] [.precision] type<br>String.format(“I have %,<span class="hljs-number">6.2f</span> bugs to fix”, <span class="hljs-number">12345.6789</span>);<br></code></pre></td></tr></table></figure>
+<p>[argument_number]：如果有多个要打印的参数，可以在这里选择是第几个参数</p>
+<p>[flags]：特殊的格式选择，例如：插入逗号，把负号放在括号里（笔者没有找到对应用法），左右对齐（左对齐：- ，默认右对齐）</p>
+<p>[width]：输出字符的最少数量</p>
+<p>[.precision]：十进制精度</p>
+<p>[type]：%d %f %x %c</p>
+
+
+  
+
+</article>
+
+
+
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://github.com/jhr419" target="_blank" rel="nofollow noopener"><span>Henry</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+    <div class="statistics">
+  
+  
+
+  
+    
+      <span id="busuanzi_container_site_pv" style="display: none">
+        总访问量 
+        <span id="busuanzi_value_site_pv"></span>
+         次
+      </span>
+    
+    
+      <span id="busuanzi_container_site_uv" style="display: none">
+        总访客数 
+        <span id="busuanzi_value_site_uv"></span>
+         人
+      </span>
+    
+    
+  
+</div>
+
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/henry.github.io/js/events.js" ></script>
+<script  src="/henry.github.io/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/henry.github.io/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  <script  src="/henry.github.io/js/local-search.js" ></script>
+
+  <script defer src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/henry.github.io/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>
